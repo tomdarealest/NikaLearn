@@ -21,7 +21,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
-  
+
   // Profile form state
   const [profileForm, setProfileForm] = useState({
     full_name: '',
@@ -65,14 +65,14 @@ export default function SettingsPage() {
 
       try {
         setInitialLoading(true);
-        
+
         // Fetch full profile data from API
         const response = await fetch(`/api/users/${user.username}`);
         const data = await response.json();
 
         if (data.success && data.data) {
           const profile = data.data;
-          
+
           setProfileForm({
             full_name: profile.full_name || '',
             username: profile.username || '',
@@ -89,7 +89,7 @@ export default function SettingsPage() {
             target_score: profile.target_score || '650',
             target_deadline: profile.target_deadline || '',
           });
-          
+
           setAvatarPreview(profile.avatar_url || '');
         }
       } catch (error) {
@@ -181,7 +181,7 @@ export default function SettingsPage() {
       }
 
       toast.success('Cập nhật thông tin thành công!');
-      
+
       // Update form with response data (API returns updated profile)
       if (data.data) {
         const profile = data.data;
@@ -203,7 +203,7 @@ export default function SettingsPage() {
         });
         setAvatarPreview(profile.avatar_url || '');
       }
-      
+
       // Refresh user data from AuthContext to update global state
       await refreshUser();
     } catch (error: any) {
@@ -352,330 +352,329 @@ export default function SettingsPage() {
                     <SettingsSkeleton />
                   ) : (
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
-                    {/* Avatar Upload */}
-                    <div>
-                      <label className="block text-sm font-semibold text-foreground mb-3">
-                        Ảnh đại diện
-                      </label>
-                      <div className="flex items-center gap-6">
-                        <div className="relative">
-                          <AvatarWithProBadge
-                            avatarUrl={avatarPreview}
-                            fullName={user?.full_name || 'User'}
-                            isPro={user?.membership_type === 'PRO'}
-                            size="xl"
-                          />
-                          {uploadingAvatar && (
-                            <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
-                              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                            </div>
-                          )}
-                          <button
-                            type="button"
-                            onClick={handleAvatarClick}
-                            disabled={uploadingAvatar}
-                            className="absolute bottom-0 right-0 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                          >
-                            <Camera className="w-4 h-4" />
-                          </button>
-                        </div>
-                        <div className="flex-1">
-                          <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            disabled={uploadingAvatar}
-                            className="hidden"
-                          />
-                          <p className="text-sm text-muted-foreground mb-2">
-                            Ảnh hồ sơ của bạn sẽ hiển thị công khai trên các trang của bạn.
-                          </p>
-                          <button
-                            type="button"
-                            onClick={handleAvatarClick}
-                            disabled={uploadingAvatar}
-                            className="text-sm text-primary hover:text-primary/80 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {uploadingAvatar ? 'Đang tải lên...' : 'Chọn ảnh mới'}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Full Name */}
-                    <div>
-                      <label className="block text-sm font-semibold text-foreground mb-2">
-                        Họ và tên
-                      </label>
-                      <input
-                        type="text"
-                        value={profileForm.full_name}
-                        onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="Khuân Huynh"
-                      />
-                    </div>
-
-                    {/* Username */}
-                    <div>
-                      <label className="block text-sm font-semibold text-foreground mb-2">
-                        Tên người dùng
-                      </label>
-                      <input
-                        type="text"
-                        value={profileForm.username}
-                        onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="huynhkhuanit"
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Tên người dùng của bạn sẽ xuất hiện trong URL profile
-                      </p>
-                    </div>
-
-                    {/* Phone */}
-                    <div>
-                      <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                        <Phone className="w-4 h-4" />
-                        Số điện thoại
-                      </label>
-                      <input
-                        type="tel"
-                        value={profileForm.phone}
-                        onChange={(e) => {
-                          // Chỉ cho phép số và một số ký tự đặc biệt như +, -, khoảng trắng
-                          const value = e.target.value.replace(/[^\d+\-\s()]/g, '');
-                          setProfileForm({ ...profileForm, phone: value });
-                        }}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        placeholder="0123456789 hoặc +84..."
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Số điện thoại sẽ được sử dụng để khôi phục mật khẩu và nhận mã OTP
-                      </p>
-                    </div>
-
-                    {/* Student Academic Section */}
-                    <div className="border-t border-border pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <GraduationCap className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-bold text-foreground">Thông tin học tập (Học viên)</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Cung cấp trường và chuyên ngành để hệ thống đề xuất bài tập và lộ trình phù hợp.
-                      </p>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* University */}
-                        <div>
-                          <label className="block text-sm font-semibold text-foreground mb-2">
-                            Trường Đại học / Cao đẳng
-                          </label>
-                          <input
-                            type="text"
-                            value={profileForm.university}
-                            onChange={(e) => setProfileForm({ ...profileForm, university: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
-                            placeholder="Ví dụ: Đại học Công nghệ TP.HCM (HUTECH)"
-                          />
-                        </div>
-
-                        {/* Major */}
-                        <div>
-                          <label className="block text-sm font-semibold text-foreground mb-2">
-                            Chuyên ngành đào tạo
-                          </label>
-                          <input
-                            type="text"
-                            value={profileForm.major}
-                            onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
-                            placeholder="Ví dụ: Công nghệ thông tin / Ngôn ngữ Anh"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* TOEIC Target Section */}
-                    <div className="border-t border-border pt-6">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Target className="w-5 h-5 text-primary" />
-                        <h3 className="text-lg font-bold text-foreground">Mục tiêu điểm TOEIC & Thời hạn (Deadline)</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Chọn mốc điểm mong muốn và ngày dự định thi để hệ thống nhắc nhở tiến độ.
-                      </p>
-
-                      {/* Score Target Pills */}
-                      <div className="mb-5">
-                        <label className="block text-sm font-semibold text-foreground mb-2.5">
-                          Mốc điểm mục tiêu
-                        </label>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                          {[
-                            { score: '500', label: 'Cơ bản (500+)', desc: 'Tốt nghiệp ĐH' },
-                            { score: '650', label: 'Khá (650+)', desc: 'Đi làm công ty' },
-                            { score: '785', label: 'Giỏi (785+)', desc: 'Đa quốc gia' },
-                            { score: '900+', label: 'Xuất sắc (900+)', desc: 'Chuyên gia / GV' },
-                          ].map((item) => {
-                            const isSelected = profileForm.target_score === item.score;
-                            return (
-                              <button
-                                key={item.score}
-                                type="button"
-                                onClick={() => setProfileForm({ ...profileForm, target_score: item.score })}
-                                className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer ${
-                                  isSelected
-                                    ? 'bg-[#FFD23F]/20 border-[#121212] shadow-[3px_3px_0_#121212] dark:bg-[#6B8045]/20 dark:border-[#FFD23F]'
-                                    : 'border-gray-200 dark:border-gray-800 hover:border-gray-400 bg-white dark:bg-[#1B261A]'
-                                }`}
-                              >
-                                <div className="flex items-center justify-between mb-1">
-                                  <span className="text-base font-black text-foreground">{item.score}</span>
-                                  {isSelected && (
-                                    <span className="w-2 h-2 rounded-full bg-primary inline-block"></span>
-                                  )}
-                                </div>
-                                <div className="text-xs font-bold text-foreground/80">{item.label}</div>
-                                <div className="text-[10px] text-muted-foreground mt-0.5">{item.desc}</div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Target Deadline */}
+                      {/* Avatar Upload */}
                       <div>
-                        <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                          <Calendar className="w-4 h-4 text-primary" />
-                          Ngày dự định thi (Deadline)
+                        <label className="block text-sm font-semibold text-foreground mb-3">
+                          Ảnh đại diện
+                        </label>
+                        <div className="flex items-center gap-6">
+                          <div className="relative">
+                            <AvatarWithProBadge
+                              avatarUrl={avatarPreview}
+                              fullName={user?.full_name || 'User'}
+                              isPro={user?.membership_type === 'PRO'}
+                              size="xl"
+                            />
+                            {uploadingAvatar && (
+                              <div className="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={handleAvatarClick}
+                              disabled={uploadingAvatar}
+                              className="absolute bottom-0 right-0 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                            >
+                              <Camera className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <div className="flex-1">
+                            <input
+                              ref={fileInputRef}
+                              type="file"
+                              accept="image/*"
+                              onChange={handleAvatarChange}
+                              disabled={uploadingAvatar}
+                              className="hidden"
+                            />
+                            <p className="text-sm text-muted-foreground mb-2">
+                              Ảnh hồ sơ của bạn sẽ hiển thị công khai trên các trang của bạn.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={handleAvatarClick}
+                              disabled={uploadingAvatar}
+                              className="text-sm text-primary hover:text-primary/80 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {uploadingAvatar ? 'Đang tải lên...' : 'Chọn ảnh mới'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Full Name */}
+                      <div>
+                        <label className="block text-sm font-semibold text-foreground mb-2">
+                          Họ và tên
                         </label>
                         <input
-                          type="date"
-                          value={profileForm.target_deadline ? profileForm.target_deadline.split('T')[0] : ''}
-                          onChange={(e) => setProfileForm({ ...profileForm, target_deadline: e.target.value })}
-                          className="w-full sm:w-72 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A] text-foreground text-sm font-semibold"
+                          type="text"
+                          value={profileForm.full_name}
+                          onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="Khuân Huynh"
+                        />
+                      </div>
+
+                      {/* Username */}
+                      <div>
+                        <label className="block text-sm font-semibold text-foreground mb-2">
+                          Tên người dùng
+                        </label>
+                        <input
+                          type="text"
+                          value={profileForm.username}
+                          onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="TranPhuQuoc"
                         />
                         <p className="text-xs text-muted-foreground mt-1">
-                          Hệ thống sẽ tính toán số ngày còn lại để phân bổ số lượng bài thi mỗi tuần
+                          Tên người dùng của bạn sẽ xuất hiện trong URL profile
                         </p>
                       </div>
-                    </div>
 
-                    {/* Bio */}
-                    <div>
-                      <label className="block text-sm font-semibold text-foreground mb-2">
-                        Giới thiệu
-                      </label>
-                      <textarea
-                        value={profileForm.bio}
-                        onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
-                        rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
-                        placeholder="Hãy điền Bio giới thiệu về bản thân tại đây nhé..."
-                      />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Viết một vài dòng giới thiệu về bản thân
-                      </p>
-                    </div>
+                      {/* Phone */}
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                          <Phone className="w-4 h-4" />
+                          Số điện thoại
+                        </label>
+                        <input
+                          type="tel"
+                          value={profileForm.phone}
+                          onChange={(e) => {
+                            // Chỉ cho phép số và một số ký tự đặc biệt như +, -, khoảng trắng
+                            const value = e.target.value.replace(/[^\d+\-\s()]/g, '');
+                            setProfileForm({ ...profileForm, phone: value });
+                          }}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="0123456789 hoặc +84..."
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Số điện thoại sẽ được sử dụng để khôi phục mật khẩu và nhận mã OTP
+                        </p>
+                      </div>
 
-                    {/* Social Links */}
-                    <div className="border-t border-border pt-6">
-                      <h3 className="text-lg font-semibold text-foreground mb-4">Thông tin mạng xã hội</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Quản lý liên kết tới các trang mạng xã hội của bạn.
-                      </p>
-
-                      <div className="space-y-4">
-                        {/* Website */}
-                        <div>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                            <Globe className="w-4 h-4" />
-                            Trang web cá nhân
-                          </label>
-                          <input
-                            type="url"
-                            value={profileForm.website}
-                            onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="https://yourwebsite.com"
-                          />
+                      {/* Student Academic Section */}
+                      <div className="border-t border-border pt-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <GraduationCap className="w-5 h-5 text-primary" />
+                          <h3 className="text-lg font-bold text-foreground">Thông tin học tập (Học viên)</h3>
                         </div>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Cung cấp trường và chuyên ngành để hệ thống đề xuất bài tập và lộ trình phù hợp.
+                        </p>
 
-                        {/* LinkedIn */}
-                        <div>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                            <Linkedin className="w-4 h-4" />
-                            LinkedIn
-                          </label>
-                          <input
-                            type="url"
-                            value={profileForm.linkedin}
-                            onChange={(e) => setProfileForm({ ...profileForm, linkedin: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="https://linkedin.com/in/username"
-                          />
-                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* University */}
+                          <div>
+                            <label className="block text-sm font-semibold text-foreground mb-2">
+                              Trường Đại học / Cao đẳng
+                            </label>
+                            <input
+                              type="text"
+                              value={profileForm.university}
+                              onChange={(e) => setProfileForm({ ...profileForm, university: e.target.value })}
+                              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
+                              placeholder="Ví dụ: Đại học Công nghệ TP.HCM (HUTECH)"
+                            />
+                          </div>
 
-                        {/* GitHub */}
-                        <div>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                            <Github className="w-4 h-4" />
-                            GitHub
-                          </label>
-                          <input
-                            type="url"
-                            value={profileForm.github}
-                            onChange={(e) => setProfileForm({ ...profileForm, github: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="https://github.com/username"
-                          />
-                        </div>
-
-                        {/* Twitter */}
-                        <div>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                            <Twitter className="w-4 h-4" />
-                            Twitter / X
-                          </label>
-                          <input
-                            type="url"
-                            value={profileForm.twitter}
-                            onChange={(e) => setProfileForm({ ...profileForm, twitter: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="https://twitter.com/username"
-                          />
-                        </div>
-
-                        {/* Facebook */}
-                        <div>
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-                            <Facebook className="w-4 h-4" />
-                            Facebook
-                          </label>
-                          <input
-                            type="url"
-                            value={profileForm.facebook}
-                            onChange={(e) => setProfileForm({ ...profileForm, facebook: e.target.value })}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="https://facebook.com/username"
-                          />
+                          {/* Major */}
+                          <div>
+                            <label className="block text-sm font-semibold text-foreground mb-2">
+                              Chuyên ngành đào tạo
+                            </label>
+                            <input
+                              type="text"
+                              value={profileForm.major}
+                              onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
+                              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
+                              placeholder="Ví dụ: Công nghệ thông tin / Ngôn ngữ Anh"
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Submit Button */}
-                    <div className="flex justify-end pt-4">
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
-                      </button>
-                    </div>
-                  </form>
+                      {/* TOEIC Target Section */}
+                      <div className="border-t border-border pt-6">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Target className="w-5 h-5 text-primary" />
+                          <h3 className="text-lg font-bold text-foreground">Mục tiêu điểm TOEIC & Thời hạn (Deadline)</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Chọn mốc điểm mong muốn và ngày dự định thi để hệ thống nhắc nhở tiến độ.
+                        </p>
+
+                        {/* Score Target Pills */}
+                        <div className="mb-5">
+                          <label className="block text-sm font-semibold text-foreground mb-2.5">
+                            Mốc điểm mục tiêu
+                          </label>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            {[
+                              { score: '500', label: 'Cơ bản (500+)', desc: 'Tốt nghiệp ĐH' },
+                              { score: '650', label: 'Khá (650+)', desc: 'Đi làm công ty' },
+                              { score: '785', label: 'Giỏi (785+)', desc: 'Đa quốc gia' },
+                              { score: '900+', label: 'Xuất sắc (900+)', desc: 'Chuyên gia / GV' },
+                            ].map((item) => {
+                              const isSelected = profileForm.target_score === item.score;
+                              return (
+                                <button
+                                  key={item.score}
+                                  type="button"
+                                  onClick={() => setProfileForm({ ...profileForm, target_score: item.score })}
+                                  className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer ${isSelected
+                                    ? 'bg-[#FFD23F]/20 border-[#121212] shadow-[3px_3px_0_#121212] dark:bg-[#6B8045]/20 dark:border-[#FFD23F]'
+                                    : 'border-gray-200 dark:border-gray-800 hover:border-gray-400 bg-white dark:bg-[#1B261A]'
+                                    }`}
+                                >
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-base font-black text-foreground">{item.score}</span>
+                                    {isSelected && (
+                                      <span className="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                                    )}
+                                  </div>
+                                  <div className="text-xs font-bold text-foreground/80">{item.label}</div>
+                                  <div className="text-[10px] text-muted-foreground mt-0.5">{item.desc}</div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Target Deadline */}
+                        <div>
+                          <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                            <Calendar className="w-4 h-4 text-primary" />
+                            Ngày dự định thi (Deadline)
+                          </label>
+                          <input
+                            type="date"
+                            value={profileForm.target_deadline ? profileForm.target_deadline.split('T')[0] : ''}
+                            onChange={(e) => setProfileForm({ ...profileForm, target_deadline: e.target.value })}
+                            className="w-full sm:w-72 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A] text-foreground text-sm font-semibold"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Hệ thống sẽ tính toán số ngày còn lại để phân bổ số lượng bài thi mỗi tuần
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Bio */}
+                      <div>
+                        <label className="block text-sm font-semibold text-foreground mb-2">
+                          Giới thiệu
+                        </label>
+                        <textarea
+                          value={profileForm.bio}
+                          onChange={(e) => setProfileForm({ ...profileForm, bio: e.target.value })}
+                          rows={4}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                          placeholder="Hãy điền Bio giới thiệu về bản thân tại đây nhé..."
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Viết một vài dòng giới thiệu về bản thân
+                        </p>
+                      </div>
+
+                      {/* Social Links */}
+                      <div className="border-t border-border pt-6">
+                        <h3 className="text-lg font-semibold text-foreground mb-4">Thông tin mạng xã hội</h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Quản lý liên kết tới các trang mạng xã hội của bạn.
+                        </p>
+
+                        <div className="space-y-4">
+                          {/* Website */}
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                              <Globe className="w-4 h-4" />
+                              Trang web cá nhân
+                            </label>
+                            <input
+                              type="url"
+                              value={profileForm.website}
+                              onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
+                              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="https://yourwebsite.com"
+                            />
+                          </div>
+
+                          {/* LinkedIn */}
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                              <Linkedin className="w-4 h-4" />
+                              LinkedIn
+                            </label>
+                            <input
+                              type="url"
+                              value={profileForm.linkedin}
+                              onChange={(e) => setProfileForm({ ...profileForm, linkedin: e.target.value })}
+                              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="https://linkedin.com/in/username"
+                            />
+                          </div>
+
+                          {/* GitHub */}
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                              <Github className="w-4 h-4" />
+                              GitHub
+                            </label>
+                            <input
+                              type="url"
+                              value={profileForm.github}
+                              onChange={(e) => setProfileForm({ ...profileForm, github: e.target.value })}
+                              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="https://github.com/username"
+                            />
+                          </div>
+
+                          {/* Twitter */}
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                              <Twitter className="w-4 h-4" />
+                              Twitter / X
+                            </label>
+                            <input
+                              type="url"
+                              value={profileForm.twitter}
+                              onChange={(e) => setProfileForm({ ...profileForm, twitter: e.target.value })}
+                              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="https://twitter.com/username"
+                            />
+                          </div>
+
+                          {/* Facebook */}
+                          <div>
+                            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                              <Facebook className="w-4 h-4" />
+                              Facebook
+                            </label>
+                            <input
+                              type="url"
+                              value={profileForm.facebook}
+                              onChange={(e) => setProfileForm({ ...profileForm, facebook: e.target.value })}
+                              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                              placeholder="https://facebook.com/username"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Submit Button */}
+                      <div className="flex justify-end pt-4">
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
+                        </button>
+                      </div>
+                    </form>
                   )}
                 </div>
               )}

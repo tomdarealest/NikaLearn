@@ -19,7 +19,7 @@ const footerLinks = {
     { name: "Blog", href: "#" },
   ],
   community: [
-    { name: "Discord", href: "https://discord.com/invite/a6pe69KkPd" },
+    { name: "Discord", href: "" },
     { name: "Facebook Group", href: "#" },
     { name: "Telegram", href: "#" },
     { name: "Youtube", href: "#" },
@@ -30,12 +30,12 @@ const socialLinks = [
   { icon: Facebook, href: "#", label: "Facebook" },
   { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Youtube, href: "#", label: "Youtube" },
-  { icon: Github, href: "https://github.com/huynhkhuanit", label: "Github" },
+  { icon: Github, href: "https://github.com/tomdarealeast", label: "Github" },
 ];
 
 export default function Footer() {
   return (
-    <footer 
+    <footer
       className="relative w-full bg-[#5C3A21] text-[#FFF8EE] pt-0 pb-12 mt-0"
       style={{
         zIndex: 30,
@@ -61,15 +61,15 @@ export default function Footer() {
                 <p className="text-[#FFF8EE]/60 text-xs font-semibold">Nền tảng luyện thi TOEIC</p>
               </div>
             </div>
-            
+
             <p className="text-[#FFF8EE]/70 text-sm leading-relaxed">
               Nền tảng luyện thi TOEIC hàng đầu với phương pháp học tập tối ưu, giúp học viên chinh phục band điểm mơ ước mỗi năm.
             </p>
-            
+
             <div className="space-y-2 pt-2">
               <div className="flex items-center space-x-2 text-[#FFF8EE]/70 text-sm">
                 <Mail className="w-3.5 h-3.5 text-[#FFD23F]" />
-                <span>huynhkhuanit@gmail.com</span>
+                <span>phuquoc13122005@gmail.com</span>
               </div>
               <div className="flex items-center space-x-2 text-[#FFF8EE]/70 text-sm">
                 <Phone className="w-3.5 h-3.5 text-[#FFD23F]" />
@@ -145,8 +145,8 @@ export default function Footer() {
             <ul className="space-y-2.5 mb-5">
               {footerLinks.community.map((link, index) => (
                 <li key={index}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block"
                     {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >
@@ -155,7 +155,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            
+
             {/* Social Links */}
             <div className="flex space-x-2.5">
               {socialLinks.map((social, index) => (
@@ -178,7 +178,7 @@ export default function Footer() {
           <div className="text-[#FFF8EE]/60 text-xs mb-3 md:mb-0" suppressHydrationWarning>
             © 2025 NikaLearn · Thiết kế lấy cảm hứng từ phong cách The IELTS Dictionary.
           </div>
-          
+
           <div className="flex space-x-5 text-xs">
             <Link href="#" className="text-[#FFF8EE]/60 hover:text-white transition-colors duration-200">
               Điều khoản sử dụng

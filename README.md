@@ -34,7 +34,7 @@
 > 
 > - **Sinh viên thực hiện:** **Trần Phú Quốc**
 > - **Lớp:** **26DTHA6**
-> - **Giảng viên hướng dẫn:** **Thầy Dương Quốc Nam**
+> - **Giảng viên hướng dẫn:** **T.S Nguyễn Hà Giang**
 > - **Tên dự án:** **NikaLearn — Nền tảng Luyện thi TOEIC & E-learning Thông minh**
 > - **Thời gian thực hiện:** 2026
 
@@ -361,8 +361,8 @@ elearning-system/
 
 **Bước 1: Clone mã nguồn dự án**
 ```bash
-git clone https://github.com/huynhkhuanit/elearning-system.git
-cd elearning-system
+https://github.com/tomdarealest/NikaLearn.git
+cd NikaLearn
 ```
 
 **Bước 2: Cài đặt các gói phụ thuộc (Dependencies)**
