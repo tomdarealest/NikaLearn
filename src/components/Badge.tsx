@@ -12,18 +12,18 @@ interface BadgeProps {
 }
 
 const variantStyles = {
-  primary: "bg-indigo-500 text-white",
-  secondary: "bg-gray-600 text-white",
-  success: "bg-emerald-500 text-white",
-  warning: "bg-amber-500 text-white",
-  danger: "bg-red-500 text-white",
-  featured: "bg-gradient-to-r from-indigo-500 to-purple-600 text-white",
-  "outline-primary": "border border-indigo-300 text-indigo-600 bg-white",
-  "outline-success": "border border-emerald-300 text-emerald-600 bg-white",
-  "gradient-orange": "bg-gradient-to-r from-orange-400 to-red-500 text-white",
-  "gradient-green": "bg-gradient-to-r from-emerald-400 to-green-500 text-white",
-  "gradient-primary": "bg-gradient-to-r from-indigo-500 to-purple-600 text-white",
-  "gradient-success": "bg-gradient-to-r from-emerald-500 to-green-600 text-white",
+  primary: "bg-[#6B8045] text-white border border-[#121212] shadow-[1.5px_1.5px_0_#121212]",
+  secondary: "bg-[#FFD23F] text-[#121212] border border-[#121212] shadow-[1.5px_1.5px_0_#121212]",
+  success: "bg-[#6B8045] text-white border border-[#121212]",
+  warning: "bg-[#FFD23F] text-[#121212] border border-[#121212]",
+  danger: "bg-[#D8261C] text-white border border-[#121212]",
+  featured: "bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212]",
+  "outline-primary": "border-2 border-[#6B8045] text-[#6B8045] bg-[#FFF8EE]",
+  "outline-success": "border-2 border-[#6B8045] text-[#6B8045] bg-white",
+  "gradient-orange": "bg-gradient-to-r from-[#FF6B2C] to-[#D8261C] text-white border border-[#121212]",
+  "gradient-green": "bg-gradient-to-r from-[#88A65B] to-[#6B8045] text-white border border-[#121212]",
+  "gradient-primary": "bg-gradient-to-r from-[#6B8045] to-[#46552B] text-white border border-[#121212]",
+  "gradient-success": "bg-[#6B8045] text-white border border-[#121212]",
 };
 
 const sizeStyles = {

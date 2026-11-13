@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import PageContainer from '@/components/PageContainer';
 import AvatarWithProBadge from '@/components/AvatarWithProBadge';
 import SettingsSkeleton from '@/components/SettingsSkeleton';
-import { User, Lock, Bell, Wand2, Camera, Globe, Linkedin, Github, Twitter, Facebook, Phone } from 'lucide-react';
+import { User, Lock, Bell, Wand2, Camera, Globe, Linkedin, Github, Twitter, Facebook, Phone, GraduationCap, Target, Calendar } from 'lucide-react';
 
 type SettingsTab = 'profile' | 'password' | 'notifications' | 'ai';
 
@@ -34,6 +34,11 @@ export default function SettingsPage() {
     github: '',
     twitter: '',
     facebook: '',
+    // Student academic & target
+    university: '',
+    major: '',
+    target_score: '650',
+    target_deadline: '',
   });
 
   // Password form state
@@ -79,6 +84,10 @@ export default function SettingsPage() {
             github: profile.github || '',
             twitter: profile.twitter || '',
             facebook: profile.facebook || '',
+            university: profile.university || '',
+            major: profile.major || '',
+            target_score: profile.target_score || '650',
+            target_deadline: profile.target_deadline || '',
           });
           
           setAvatarPreview(profile.avatar_url || '');
@@ -187,6 +196,10 @@ export default function SettingsPage() {
           github: profile.github || '',
           twitter: profile.twitter || '',
           facebook: profile.facebook || '',
+          university: profile.university || '',
+          major: profile.major || '',
+          target_score: profile.target_score || '650',
+          target_deadline: profile.target_deadline || '',
         });
         setAvatarPreview(profile.avatar_url || '');
       }
@@ -265,7 +278,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Sidebar Skeleton */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl border border-gray-200 p-2">
+              <div className="bg-card rounded-xl border border-border p-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="h-12 bg-gray-200 rounded-lg mb-2 animate-pulse"></div>
                 ))}
@@ -273,7 +286,7 @@ export default function SettingsPage() {
             </div>
             {/* Content Skeleton */}
             <div className="lg:col-span-3">
-              <div className="bg-white rounded-xl border border-gray-200 p-6">
+              <div className="bg-card rounded-xl border border-border p-6">
                 <SettingsSkeleton />
               </div>
             </div>
@@ -292,8 +305,8 @@ export default function SettingsPage() {
     <PageContainer>
       <div className="max-w-7xl mx-auto py-8 px-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Cài đặt tài khoản</h1>
-          <p className="text-gray-600 mt-2">
+          <h1 className="text-3xl font-bold text-foreground">Cài đặt tài khoản</h1>
+          <p className="text-muted-foreground mt-2">
             Quản lý cài đặt tài khoản của bạn như thông tin cá nhân, cài đặt bảo mật, quản lý thông báo, v.v.
           </p>
         </div>
@@ -301,7 +314,7 @@ export default function SettingsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl border border-gray-200 p-2">
+            <nav className="bg-card rounded-xl border border-border p-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 return (
@@ -312,7 +325,7 @@ export default function SettingsPage() {
                       w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all
                       ${activeTab === tab.id
                         ? 'bg-gray-800 text-white'
-                        : 'text-gray-700 hover:bg-gray-50'
+                        : 'text-gray-700 hover:bg-muted'
                       }
                     `}
                   >
@@ -326,12 +339,12 @@ export default function SettingsPage() {
 
           {/* Content */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="bg-card rounded-xl border border-border p-6">
               {/* Profile Tab */}
               {activeTab === 'profile' && (
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Thông tin cá nhân</h2>
-                  <p className="text-gray-600 mb-6">
+                  <h2 className="text-xl font-bold text-foreground mb-6">Thông tin cá nhân</h2>
+                  <p className="text-muted-foreground mb-6">
                     Quản lý tên hiển thị, tên người dùng, bio và avatar của bạn.
                   </p>
 
@@ -341,7 +354,7 @@ export default function SettingsPage() {
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
                     {/* Avatar Upload */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-3">
+                      <label className="block text-sm font-semibold text-foreground mb-3">
                         Ảnh đại diện
                       </label>
                       <div className="flex items-center gap-6">
@@ -375,7 +388,7 @@ export default function SettingsPage() {
                             disabled={uploadingAvatar}
                             className="hidden"
                           />
-                          <p className="text-sm text-gray-600 mb-2">
+                          <p className="text-sm text-muted-foreground mb-2">
                             Ảnh hồ sơ của bạn sẽ hiển thị công khai trên các trang của bạn.
                           </p>
                           <button
@@ -392,7 +405,7 @@ export default function SettingsPage() {
 
                     {/* Full Name */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Họ và tên
                       </label>
                       <input
@@ -406,7 +419,7 @@ export default function SettingsPage() {
 
                     {/* Username */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Tên người dùng
                       </label>
                       <input
@@ -416,14 +429,14 @@ export default function SettingsPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         placeholder="huynhkhuanit"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Tên người dùng của bạn sẽ xuất hiện trong URL profile
                       </p>
                     </div>
 
                     {/* Phone */}
                     <div>
-                      <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 mb-2">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                         <Phone className="w-4 h-4" />
                         Số điện thoại
                       </label>
@@ -438,14 +451,121 @@ export default function SettingsPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         placeholder="0123456789 hoặc +84..."
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Số điện thoại sẽ được sử dụng để khôi phục mật khẩu và nhận mã OTP
                       </p>
                     </div>
 
+                    {/* Student Academic Section */}
+                    <div className="border-t border-border pt-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <GraduationCap className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-bold text-foreground">Thông tin học tập (Học viên)</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Cung cấp trường và chuyên ngành để hệ thống đề xuất bài tập và lộ trình phù hợp.
+                      </p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* University */}
+                        <div>
+                          <label className="block text-sm font-semibold text-foreground mb-2">
+                            Trường Đại học / Cao đẳng
+                          </label>
+                          <input
+                            type="text"
+                            value={profileForm.university}
+                            onChange={(e) => setProfileForm({ ...profileForm, university: e.target.value })}
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
+                            placeholder="Ví dụ: Đại học Công nghệ TP.HCM (HUTECH)"
+                          />
+                        </div>
+
+                        {/* Major */}
+                        <div>
+                          <label className="block text-sm font-semibold text-foreground mb-2">
+                            Chuyên ngành đào tạo
+                          </label>
+                          <input
+                            type="text"
+                            value={profileForm.major}
+                            onChange={(e) => setProfileForm({ ...profileForm, major: e.target.value })}
+                            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A]"
+                            placeholder="Ví dụ: Công nghệ thông tin / Ngôn ngữ Anh"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* TOEIC Target Section */}
+                    <div className="border-t border-border pt-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Target className="w-5 h-5 text-primary" />
+                        <h3 className="text-lg font-bold text-foreground">Mục tiêu điểm TOEIC & Thời hạn (Deadline)</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Chọn mốc điểm mong muốn và ngày dự định thi để hệ thống nhắc nhở tiến độ.
+                      </p>
+
+                      {/* Score Target Pills */}
+                      <div className="mb-5">
+                        <label className="block text-sm font-semibold text-foreground mb-2.5">
+                          Mốc điểm mục tiêu
+                        </label>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {[
+                            { score: '500', label: 'Cơ bản (500+)', desc: 'Tốt nghiệp ĐH' },
+                            { score: '650', label: 'Khá (650+)', desc: 'Đi làm công ty' },
+                            { score: '785', label: 'Giỏi (785+)', desc: 'Đa quốc gia' },
+                            { score: '900+', label: 'Xuất sắc (900+)', desc: 'Chuyên gia / GV' },
+                          ].map((item) => {
+                            const isSelected = profileForm.target_score === item.score;
+                            return (
+                              <button
+                                key={item.score}
+                                type="button"
+                                onClick={() => setProfileForm({ ...profileForm, target_score: item.score })}
+                                className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-200 cursor-pointer ${
+                                  isSelected
+                                    ? 'bg-[#FFD23F]/20 border-[#121212] shadow-[3px_3px_0_#121212] dark:bg-[#6B8045]/20 dark:border-[#FFD23F]'
+                                    : 'border-gray-200 dark:border-gray-800 hover:border-gray-400 bg-white dark:bg-[#1B261A]'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="text-base font-black text-foreground">{item.score}</span>
+                                  {isSelected && (
+                                    <span className="w-2 h-2 rounded-full bg-primary inline-block"></span>
+                                  )}
+                                </div>
+                                <div className="text-xs font-bold text-foreground/80">{item.label}</div>
+                                <div className="text-[10px] text-muted-foreground mt-0.5">{item.desc}</div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Target Deadline */}
+                      <div>
+                        <label className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                          <Calendar className="w-4 h-4 text-primary" />
+                          Ngày dự định thi (Deadline)
+                        </label>
+                        <input
+                          type="date"
+                          value={profileForm.target_deadline ? profileForm.target_deadline.split('T')[0] : ''}
+                          onChange={(e) => setProfileForm({ ...profileForm, target_deadline: e.target.value })}
+                          className="w-full sm:w-72 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-[#1B261A] text-foreground text-sm font-semibold"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Hệ thống sẽ tính toán số ngày còn lại để phân bổ số lượng bài thi mỗi tuần
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Bio */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Giới thiệu
                       </label>
                       <textarea
@@ -455,15 +575,15 @@ export default function SettingsPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                         placeholder="Hãy điền Bio giới thiệu về bản thân tại đây nhé..."
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Viết một vài dòng giới thiệu về bản thân
                       </p>
                     </div>
 
                     {/* Social Links */}
-                    <div className="border-t border-gray-200 pt-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Thông tin mạng xã hội</h3>
-                      <p className="text-sm text-gray-600 mb-4">
+                    <div className="border-t border-border pt-6">
+                      <h3 className="text-lg font-semibold text-foreground mb-4">Thông tin mạng xã hội</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
                         Quản lý liên kết tới các trang mạng xã hội của bạn.
                       </p>
 
@@ -563,15 +683,15 @@ export default function SettingsPage() {
               {/* Password Tab */}
               {activeTab === 'password' && (
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Mật khẩu và bảo mật</h2>
-                  <p className="text-gray-600 mb-6">
+                  <h2 className="text-xl font-bold text-foreground mb-6">Mật khẩu và bảo mật</h2>
+                  <p className="text-muted-foreground mb-6">
                     Cập nhật mật khẩu của bạn để bảo vệ tài khoản.
                   </p>
 
                   <form onSubmit={handlePasswordSubmit} className="space-y-6">
                     {/* Current Password */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Mật khẩu hiện tại
                       </label>
                       <input
@@ -586,7 +706,7 @@ export default function SettingsPage() {
 
                     {/* New Password */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Mật khẩu mới
                       </label>
                       <input
@@ -597,14 +717,14 @@ export default function SettingsPage() {
                         placeholder="••••••••"
                         required
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Mật khẩu phải có ít nhất 6 ký tự
                       </p>
                     </div>
 
                     {/* Confirm Password */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-900 mb-2">
+                      <label className="block text-sm font-semibold text-foreground mb-2">
                         Xác nhận mật khẩu mới
                       </label>
                       <input
@@ -634,13 +754,13 @@ export default function SettingsPage() {
               {/* Notifications Tab */}
               {activeTab === 'notifications' && (
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">Tùy chọn thông báo</h2>
-                  <p className="text-gray-600 mb-6">
+                  <h2 className="text-xl font-bold text-foreground mb-6">Tùy chọn thông báo</h2>
+                  <p className="text-muted-foreground mb-6">
                     Tùy chỉnh các thông báo bạn muốn nhận.
                   </p>
                   <div className="text-center py-12">
                     <Bell className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-600">Chức năng đang được phát triển...</p>
+                    <p className="text-muted-foreground">Chức năng đang được phát triển...</p>
                   </div>
                 </div>
               )}
@@ -648,13 +768,13 @@ export default function SettingsPage() {
               {/* AI Assistant Tab */}
               {activeTab === 'ai' && (
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-6">AI Assistant</h2>
-                  <p className="text-gray-600 mb-6">
+                  <h2 className="text-xl font-bold text-foreground mb-6">AI Assistant</h2>
+                  <p className="text-muted-foreground mb-6">
                     Cài đặt trợ lý AI để hỗ trợ học tập.
                   </p>
                   <div className="text-center py-12">
                     <Wand2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-600">Chức năng đang được phát triển...</p>
+                    <p className="text-muted-foreground">Chức năng đang được phát triển...</p>
                   </div>
                 </div>
               )}

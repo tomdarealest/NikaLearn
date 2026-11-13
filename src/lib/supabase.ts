@@ -13,7 +13,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Server routes use supabaseAdmin when anon key is not configured
 export const supabase =
   supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
+    ? createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          flowType: 'pkce',
+          detectSessionInUrl: true,
+          persistSession: true,
+        },
+      })
     : null;
 
 // Create Supabase admin client for server-side operations (uses service role key)

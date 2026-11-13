@@ -269,7 +269,7 @@ async function uploadToCloudinary(
       try {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
-            folder: "dhvlearnx/videos",
+            folder: "nikalearn/videos",
             public_id: `${lessonId}-${Date.now()}`,
             resource_type: "video",
             // Video optimization

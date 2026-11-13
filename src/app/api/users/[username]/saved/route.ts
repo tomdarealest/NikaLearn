@@ -13,16 +13,27 @@ export async function GET(
   { params }: { params: Promise<{ username: string }> }
 ) {
   try {
-    const { username } = await params;
+    const { username: rawUsername } = await params;
+    const username = decodeURIComponent(rawUsername).replace(/^@/, '').trim();
 
     // Get user ID from username
-    const user = await queryOneBuilder<{ id: string }>(
+    let user = await queryOneBuilder<{ id: string }>(
       'users',
       {
         select: 'id',
         filters: { username }
       }
     );
+
+    if (!user) {
+      user = await queryOneBuilder<{ id: string }>(
+        'users',
+        {
+          select: 'id',
+          filters: { id: username }
+        }
+      );
+    }
 
     if (!user) {
       return NextResponse.json(

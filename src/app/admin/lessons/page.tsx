@@ -163,8 +163,8 @@ export default function AdminLessonsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader className="w-12 h-12 text-indigo-500 animate-spin mx-auto mb-4" />
-          <p className="text-slate-300">Đang xác thực quyền truy cập...</p>
+          <Loader className="w-10 h-10 text-blue-600 animate-spin mx-auto mb-4" />
+          <p className="text-slate-500 text-sm">Đang xác thực quyền truy cập...</p>
         </div>
       </div>
     );
@@ -179,10 +179,10 @@ export default function AdminLessonsPage() {
       <div className="min-h-screen flex items-center justify-center p-6">
         <div className="text-center max-w-md">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-slate-100 mb-6 font-medium">{error}</p>
+          <p className="text-slate-700 mb-6 font-medium">{error}</p>
           <button
             onClick={fetchCourses}
-            className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition font-medium"
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition font-medium"
           >
             Thử Lại
           </button>
@@ -195,17 +195,17 @@ export default function AdminLessonsPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-100 mb-2">Quản Lý Nội Dung Bài Học</h1>
-        <p className="text-slate-400">Chỉnh sửa markdown content cho từng bài học trong khóa học</p>
+        <h1 className="text-2xl font-bold text-slate-800 mb-2">Quản lý nội dung bài học</h1>
+        <p className="text-slate-500 text-sm">Chỉnh sửa markdown content cho từng bài học trong khóa học</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm font-medium">Khóa Học</p>
-              <p className="text-3xl font-bold text-slate-100 mt-1">{stats.totalCourses}</p>
+              <p className="text-slate-500 text-sm font-medium">Khóa Học</p>
+              <p className="text-3xl font-bold text-slate-800 mt-1">{stats.totalCourses}</p>
             </div>
             <div className="p-3 bg-blue-500/20 rounded-lg">
               <BookOpen className="w-6 h-6 text-blue-400" />
@@ -213,11 +213,11 @@ export default function AdminLessonsPage() {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm font-medium">Tổng Bài Học</p>
-              <p className="text-3xl font-bold text-slate-100 mt-1">{stats.totalLessons}</p>
+              <p className="text-slate-500 text-sm font-medium">Tổng Bài Học</p>
+              <p className="text-3xl font-bold text-slate-800 mt-1">{stats.totalLessons}</p>
             </div>
             <div className="p-3 bg-purple-500/20 rounded-lg">
               <FileText className="w-6 h-6 text-purple-400" />
@@ -225,11 +225,11 @@ export default function AdminLessonsPage() {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm font-medium">Có Nội Dung</p>
-              <p className="text-3xl font-bold text-slate-100 mt-1">{stats.lessonsWithContent}</p>
+              <p className="text-slate-500 text-sm font-medium">Có Nội Dung</p>
+              <p className="text-3xl font-bold text-slate-800 mt-1">{stats.lessonsWithContent}</p>
               <p className="text-xs text-slate-500 mt-1">
                 {stats.totalLessons > 0 
                   ? `${Math.round((stats.lessonsWithContent / stats.totalLessons) * 100)}%`
@@ -243,11 +243,11 @@ export default function AdminLessonsPage() {
           </div>
         </div>
 
-        <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm font-medium">Đã Xuất Bản</p>
-              <p className="text-3xl font-bold text-slate-100 mt-1">{stats.publishedLessons}</p>
+              <p className="text-slate-500 text-sm font-medium">Đã Xuất Bản</p>
+              <p className="text-3xl font-bold text-slate-800 mt-1">{stats.publishedLessons}</p>
             </div>
             <div className="p-3 bg-emerald-500/20 rounded-lg">
               <TrendingUp className="w-6 h-6 text-emerald-400" />
@@ -265,13 +265,13 @@ export default function AdminLessonsPage() {
             placeholder="Tìm kiếm khóa học, chương, bài học..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition shadow-sm"
           />
         </div>
         <div className="relative">
           <button 
             onClick={() => setShowFilter(!showFilter)}
-            className={`flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-100 transition font-medium ${showFilter ? 'ring-2 ring-indigo-500' : ''}`}
+            className={`flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl text-slate-700 transition font-medium shadow-sm ${showFilter ? 'ring-2 ring-blue-500' : ''}`}
           >
             <Filter className="w-5 h-5" />
             <span>
@@ -280,22 +280,22 @@ export default function AdminLessonsPage() {
           </button>
 
           {showFilter && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-slate-800 border border-slate-700 rounded-lg shadow-xl z-10 overflow-hidden">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-10 overflow-hidden">
               <button
                 onClick={() => { setFilterStatus('all'); setShowFilter(false); }}
-                className={`w-full text-left px-4 py-3 hover:bg-slate-700 transition text-sm ${filterStatus === 'all' ? 'text-indigo-400 font-medium' : 'text-slate-300'}`}
+                className={`w-full text-left px-4 py-3 hover:bg-slate-50 transition text-sm ${filterStatus === 'all' ? 'text-blue-600 font-medium' : 'text-slate-600'}`}
               >
                 Tất cả
               </button>
               <button
                 onClick={() => { setFilterStatus('published'); setShowFilter(false); }}
-                className={`w-full text-left px-4 py-3 hover:bg-slate-700 transition text-sm ${filterStatus === 'published' ? 'text-indigo-400 font-medium' : 'text-slate-300'}`}
+                className={`w-full text-left px-4 py-3 hover:bg-slate-50 transition text-sm ${filterStatus === 'published' ? 'text-blue-600 font-medium' : 'text-slate-600'}`}
               >
                 Đã xuất bản
               </button>
               <button
                 onClick={() => { setFilterStatus('draft'); setShowFilter(false); }}
-                className={`w-full text-left px-4 py-3 hover:bg-slate-700 transition text-sm ${filterStatus === 'draft' ? 'text-indigo-400 font-medium' : 'text-slate-300'}`}
+                className={`w-full text-left px-4 py-3 hover:bg-slate-50 transition text-sm ${filterStatus === 'draft' ? 'text-blue-600 font-medium' : 'text-slate-600'}`}
               >
                 Bản nháp
               </button>
@@ -308,45 +308,45 @@ export default function AdminLessonsPage() {
       <div className="space-y-3">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader className="w-8 h-8 text-indigo-500 animate-spin" />
+            <Loader className="w-8 h-8 text-blue-600 animate-spin" />
           </div>
         ) : filteredCourses.length === 0 ? (
-          <div className="text-center py-16 bg-slate-800/30 border border-slate-700 rounded-lg">
-            <BookOpen className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <p className="text-slate-400 font-medium">Không có khóa học nào</p>
-            <p className="text-slate-500 text-sm mt-1">Hãy tạo khóa học để bắt đầu quản lý</p>
+          <div className="text-center py-16 bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+            <p className="text-slate-600 font-medium">Không có khóa học nào</p>
+            <p className="text-slate-400 text-sm mt-1">Hãy tạo khóa học để bắt đầu quản lý</p>
           </div>
         ) : (
           filteredCourses.map((course) => (
             <div
               key={course.id}
-              className="border border-slate-700 rounded-lg overflow-hidden bg-slate-800/30 hover:bg-slate-800/50 transition-all duration-200"
+              className="border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-200"
             >
               {/* Course Header */}
               <button
                 onClick={() => toggleCourse(course.id)}
-                className="w-full px-6 py-4 bg-slate-800/50 hover:bg-slate-800/70 transition flex items-center justify-between text-left border-b border-slate-700"
+                className="w-full px-6 py-4 bg-slate-50 hover:bg-slate-100 transition flex items-center justify-between text-left border-b border-slate-100"
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     {expandedCourses.has(course.id) ? (
-                      <ChevronDown className="w-5 h-5 text-indigo-400" />
+                      <ChevronDown className="w-5 h-5 text-blue-600" />
                     ) : (
-                      <ChevronRight className="w-5 h-5 text-slate-500" />
+                      <ChevronRight className="w-5 h-5 text-slate-400" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="text-lg font-semibold text-slate-100 truncate">
+                    <h3 className="text-lg font-semibold text-slate-800 truncate">
                       {course.title}
                     </h3>
                     <p className="text-sm text-slate-500 mt-1">{course.slug}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0 ml-4">
-                  <div className="px-3 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-xs font-semibold border border-indigo-500/30">
+                  <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-semibold border border-blue-100">
                     {course.chapters?.length || 0} chương
                   </div>
-                  <div className="px-3 py-1 bg-slate-700/50 text-slate-300 rounded-full text-xs font-semibold">
+                  <div className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold">
                     {course.chapters?.reduce((total, ch) => total + (ch.lessons?.length || 0), 0) || 0} bài
                   </div>
                 </div>
@@ -354,36 +354,36 @@ export default function AdminLessonsPage() {
 
               {/* Chapters */}
               {expandedCourses.has(course.id) && (
-                <div className="divide-y divide-slate-700">
+                <div className="divide-y divide-slate-100">
                   {course.chapters?.map((chapter, chapterIdx) => (
                     <div key={chapter.id}>
                       {/* Chapter Header */}
                       <button
                         onClick={() => toggleChapter(chapter.id)}
-                        className="w-full px-6 py-3 bg-slate-900/50 hover:bg-slate-900/70 transition flex items-center justify-between text-left"
+                        className="w-full px-6 py-3 bg-white hover:bg-slate-50 transition flex items-center justify-between text-left"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <div className="flex-shrink-0">
                             {expandedChapters.has(chapter.id) ? (
-                              <ChevronDown className="w-4 h-4 text-indigo-400" />
+                              <ChevronDown className="w-4 h-4 text-blue-600" />
                             ) : (
-                              <ChevronRight className="w-4 h-4 text-slate-500" />
+                              <ChevronRight className="w-4 h-4 text-slate-400" />
                             )}
                           </div>
                           <div className="min-w-0">
-                            <h4 className="font-medium text-slate-200">
+                            <h4 className="font-medium text-slate-700">
                               Chương {chapterIdx + 1}: {chapter.title}
                             </h4>
                           </div>
                         </div>
-                        <span className="text-xs text-slate-400 bg-slate-700/50 px-2.5 py-1 rounded-full whitespace-nowrap ml-4 flex-shrink-0">
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full whitespace-nowrap ml-4 flex-shrink-0">
                           {chapter.lessons?.length || 0} bài
                         </span>
                       </button>
 
                       {/* Lessons */}
                       {expandedChapters.has(chapter.id) && (
-                        <div className="bg-slate-950/50 divide-y divide-slate-700">
+                        <div className="bg-slate-50 divide-y divide-slate-100">
                           {chapter.lessons?.map((lesson, lessonIdx) => {
                             const contentExists = hasContent(lesson);
 
@@ -391,44 +391,44 @@ export default function AdminLessonsPage() {
                               <Link
                                 key={lesson.id}
                                 href={`/admin/lessons/${lesson.id}/edit`}
-                                className="px-6 py-3 flex items-center justify-between hover:bg-slate-900/50 transition group"
+                                className="px-6 py-3 flex items-center justify-between hover:bg-white transition group"
                               >
                                 <div className="flex items-center gap-3 flex-1 min-w-0">
                                   <div className="flex-shrink-0">
                                     {contentExists ? (
-                                      <div className="w-6 h-6 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center">
-                                        <CheckCircle className="w-3.5 h-3.5 text-green-400" />
+                                      <div className="w-6 h-6 rounded-full bg-green-50 border border-green-200 flex items-center justify-center">
+                                        <CheckCircle className="w-3.5 h-3.5 text-green-600" />
                                       </div>
                                     ) : (
-                                      <div className="w-6 h-6 rounded-full bg-slate-700/50 border border-slate-600 flex items-center justify-center">
-                                        <Circle className="w-3.5 h-3.5 text-slate-500" />
+                                      <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center">
+                                        <Circle className="w-3.5 h-3.5 text-slate-400" />
                                       </div>
                                     )}
                                   </div>
                                   <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                      <p className="text-sm text-slate-300 group-hover:text-indigo-400 transition font-medium truncate">
+                                      <p className="text-sm text-slate-600 group-hover:text-blue-600 transition font-medium truncate">
                                         Bài {lessonIdx + 1}: {lesson.title}
                                       </p>
                                       {lesson.is_published ? (
-                                        <span className="text-xs px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded whitespace-nowrap flex-shrink-0">
+                                        <span className="text-xs px-2 py-1 bg-emerald-50 text-emerald-700 rounded whitespace-nowrap flex-shrink-0">
                                           Đã Xuất Bản
                                         </span>
                                       ) : (
-                                        <span className="text-xs px-2 py-1 bg-slate-700/50 text-slate-400 rounded whitespace-nowrap flex-shrink-0">
+                                        <span className="text-xs px-2 py-1 bg-slate-100 text-slate-500 rounded whitespace-nowrap flex-shrink-0">
                                           Nháp
                                         </span>
                                       )}
                                     </div>
                                     {contentExists && (
-                                      <p className="text-xs text-green-400 mt-1 flex items-center gap-1">
+                                      <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
                                         <CheckCircle className="w-3 h-3" />
                                         Có nội dung markdown
                                       </p>
                                     )}
                                   </div>
                                 </div>
-                                <Edit2 className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition flex-shrink-0 ml-4" />
+                                <Edit2 className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition flex-shrink-0 ml-4" />
                               </Link>
                             );
                           })}

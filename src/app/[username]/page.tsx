@@ -7,10 +7,11 @@ import ActivityHeatmap from '@/components/ActivityHeatmap';
 import ProfileStats from '@/components/ProfileStats';
 import PageContainer from '@/components/PageContainer';
 import AvatarWithProBadge from '@/components/AvatarWithProBadge';
-import { Calendar, Award, Clock, BookOpen, FileText, Globe, Linkedin, Github, Twitter, Facebook, Eye, Heart, MessageCircle } from 'lucide-react';
+import { Calendar, Award, Clock, BookOpen, FileText, Globe, Linkedin, Github, Twitter, Facebook, Eye, Heart, MessageCircle, ArrowRight, Settings as SettingsIcon, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import CertificateModal from '@/components/CertificateModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Custom hook for drag-to-scroll functionality with carousel-like behavior
 function useDragToScroll() {
@@ -225,6 +226,7 @@ function useDragToScroll() {
 export default function UserProfilePage() {
   const params = useParams();
   const username = params.username as string;
+  const { user: currentUser } = useAuth();
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [activityData, setActivityData] = useState<ActivityData | null>(null);
@@ -388,97 +390,38 @@ export default function UserProfilePage() {
       <PageContainer>
         <div className="max-w-7xl mx-auto py-8 px-4">
           {/* Profile Header Skeleton */}
-          <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6 animate-pulse">
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Avatar Skeleton */}
-              <div className="flex-shrink-0">
-                <div className="relative">
-                  <div className="w-32 h-32 rounded-full bg-gray-200 border-4 border-gray-100"></div>
-                </div>
-              </div>
-
-              {/* Profile Info Skeleton - Match exact spacing */}
-              <div className="flex-1">
-                <div className="flex items-start justify-between flex-col md:flex-row gap-4">
-                  <div className="flex-1">
-                    {/* Name - h1 text-3xl with mb-1 */}
-                    <div className="h-9 bg-gray-200 rounded-lg w-64 mb-1"></div>
-                    {/* Username - text-lg with mb-4 */}
-                    <div className="h-7 bg-gray-100 rounded-lg w-40 mb-4"></div>
-                    
-                    {/* Bio - 2 lines with mb-4 */}
-                    <div className="space-y-2 mb-4">
-                      <div className="h-5 bg-gray-100 rounded-lg w-full"></div>
-                      <div className="h-5 bg-gray-100 rounded-lg w-3/4"></div>
-                    </div>
-
-                    {/* Social Links - flex gap-3 mb-4 */}
-                    <div className="flex flex-wrap gap-3 mb-4">
-                      <div className="h-8 bg-gray-100 rounded-lg w-24"></div>
-                      <div className="h-8 bg-gray-100 rounded-lg w-24"></div>
-                      <div className="h-8 bg-gray-100 rounded-lg w-24"></div>
-                    </div>
-
-                    {/* Meta Info - flex gap-4 text-sm */}
-                    <div className="flex flex-wrap gap-4 text-sm">
-                      <div className="h-5 bg-gray-100 rounded-lg w-40"></div>
-                      <div className="h-5 bg-gray-100 rounded-lg w-32"></div>
-                    </div>
-                  </div>
+          <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[4px_4px_0_#121212]/10 overflow-hidden mb-6 animate-pulse">
+            <div className="h-32 sm:h-40 bg-stone-200 dark:bg-stone-800"></div>
+            <div className="p-6 sm:p-8">
+              <div className="flex flex-col sm:flex-row gap-6 items-start">
+                <div className="-mt-16 sm:-mt-20 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-stone-300 dark:bg-stone-700 border-4 border-white dark:border-[#1B261A]"></div>
+                <div className="flex-1 space-y-3 w-full">
+                  <div className="h-8 bg-stone-200 dark:bg-stone-700 rounded-lg w-56"></div>
+                  <div className="h-5 bg-stone-100 dark:bg-stone-800 rounded-lg w-32"></div>
+                  <div className="h-4 bg-stone-100 dark:bg-stone-800 rounded-lg w-full max-w-md"></div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Stats Grid Skeleton */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {[1, 2, 3, 4].map((i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl border border-gray-200 p-6 animate-pulse"
+                className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 p-4 animate-pulse"
               >
-                <div className="h-10 w-10 bg-gray-200 rounded-lg mb-3"></div>
-                <div className="h-8 bg-gray-200 rounded-lg w-16 mb-2"></div>
-                <div className="h-4 bg-gray-100 rounded-lg w-24"></div>
+                <div className="h-10 w-10 bg-stone-200 dark:bg-stone-700 rounded-xl mb-3"></div>
+                <div className="h-7 bg-stone-200 dark:bg-stone-700 rounded-lg w-16 mb-2"></div>
+                <div className="h-3 bg-stone-100 dark:bg-stone-800 rounded-lg w-20"></div>
               </div>
             ))}
           </div>
 
           {/* Activity Heatmap Skeleton */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 animate-pulse">
-            <div className="flex items-center justify-between mb-4">
-              <div className="h-6 bg-gray-200 rounded-lg w-48"></div>
-              <div className="flex gap-4">
-                <div className="h-5 bg-gray-100 rounded-lg w-32"></div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-                <div key={i} className="flex gap-1">
-                  {Array.from({ length: 53 }).map((_, j) => (
-                    <div key={j} className="w-3 h-3 bg-gray-100 rounded-sm"></div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Tabs Skeleton */}
-          <div className="bg-white rounded-xl border border-gray-200 animate-pulse">
-            <div className="border-b border-gray-200 p-2">
-              <div className="flex gap-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-10 bg-gray-100 rounded-lg w-40"></div>
-                ))}
-              </div>
-            </div>
-            <div className="p-6">
-              <div className="text-center py-12 space-y-4">
-                <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto"></div>
-                <div className="h-6 bg-gray-200 rounded-lg w-48 mx-auto"></div>
-                <div className="h-4 bg-gray-100 rounded-lg w-64 mx-auto"></div>
-              </div>
-            </div>
+          <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[4px_4px_0_#121212]/10 p-6 mb-6 animate-pulse">
+            <div className="h-6 bg-stone-200 dark:bg-stone-700 rounded-lg w-52 mb-4"></div>
+            <div className="h-28 bg-stone-100 dark:bg-stone-800 rounded-xl w-full"></div>
           </div>
         </div>
       </PageContainer>
@@ -488,11 +431,23 @@ export default function UserProfilePage() {
   if (error || !profile) {
     return (
       <PageContainer>
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="text-6xl mb-4">😔</div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy người dùng</h1>
-            <p className="text-gray-600">{error || 'Người dùng không tồn tại hoặc đã bị xóa'}</p>
+        <div className="flex items-center justify-center min-h-[60vh] px-4">
+          <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[5px_5px_0_#121212] p-8 max-w-md w-full text-center">
+            <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-3xl mx-auto mb-4">
+              😔
+            </div>
+            <h1 className="text-2xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
+              Không tìm thấy người dùng
+            </h1>
+            <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm mb-6">
+              {error || 'Người dùng không tồn tại hoặc đã bị xóa'}
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full border-2 border-[#121212] bg-[#6B8045] hover:bg-[#556834] text-white font-black text-sm shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] transition-all"
+            >
+              Về trang chủ
+            </Link>
           </div>
         </div>
       </PageContainer>
@@ -508,114 +463,174 @@ export default function UserProfilePage() {
     <PageContainer>
       <div className="max-w-7xl mx-auto py-8 px-4">
         {/* Profile Header */}
-        <div className="bg-white rounded-xl border border-gray-200 p-8 mb-6">
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Avatar */}
-            <div className="flex-shrink-0">
-              <AvatarWithProBadge
-                avatarUrl={profile.avatar_url}
-                fullName={profile.full_name}
-                isPro={profile.membership_type === 'PRO'}
-                size="2xl"
-              />
+        <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[5px_5px_0_#121212] dark:shadow-[5px_5px_0_#0D150C] mb-6 overflow-hidden">
+          {/* Decorative Cover Banner */}
+          <div className="h-28 sm:h-36 bg-gradient-to-r from-[#6B8045] via-[#556834] to-[#FFD23F] relative border-b-2 border-[#121212] dark:border-[#2F422B] overflow-hidden">
+            {/* Geometric accents in banner */}
+            <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#121212_1.5px,transparent_1.5px)] [background-size:16px_16px]"></div>
+            <div className="absolute right-4 top-4 hidden sm:flex items-center gap-2">
+              {profile.membership_type === 'PRO' ? (
+                <span className="px-3 py-1 rounded-full bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] text-xs font-black uppercase tracking-wider">
+                  ⭐ PRO Member
+                </span>
+              ) : (
+                <span className="px-3 py-1 rounded-full bg-white text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] text-xs font-black uppercase tracking-wider">
+                  🎓 Học viên
+                </span>
+              )}
             </div>
+          </div>
 
-            {/* Profile Info */}
-            <div className="flex-1">
-              <div className="flex items-start justify-between flex-col md:flex-row gap-4">
-                <div className="flex-1">
-                  <h1 className="text-3xl font-bold text-gray-900 mb-1">
-                    {profile.full_name}
-                  </h1>
-                  <p className="text-lg text-gray-600 mb-4">@{profile.username}</p>
-                  
-                  {profile.bio && (
-                    <p className="text-gray-700 mb-4 max-w-2xl">{profile.bio}</p>
-                  )}
+          {/* Profile Card Body */}
+          <div className="px-5 sm:px-8 pb-7 pt-0 relative">
+            <div className="flex flex-col sm:flex-row gap-5 sm:gap-8 items-start">
+              {/* Avatar overlapping banner */}
+              <div className="-mt-14 sm:-mt-16 flex-shrink-0 relative z-10">
+                <div className="p-1 bg-white dark:bg-[#1B261A] rounded-full border-[3.5px] border-[#121212] shadow-[4px_4px_0_#121212] inline-block">
+                  <AvatarWithProBadge
+                    avatarUrl={profile.avatar_url}
+                    fullName={profile.full_name}
+                    isPro={profile.membership_type === 'PRO'}
+                    size="2xl"
+                  />
+                </div>
+              </div>
 
-                  {/* Social Links */}
-                  {(profile.website || profile.linkedin || profile.github || profile.twitter || profile.facebook) && (
-                    <div className="flex flex-wrap gap-3 mb-4">
-                      {profile.website && (
-                        <a
-                          href={profile.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm text-gray-700 transition-colors"
-                        >
-                          <Globe className="w-4 h-4" />
-                          <span>Website</span>
-                        </a>
-                      )}
-                      {profile.linkedin && (
-                        <a
-                          href={profile.linkedin}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg text-sm text-blue-700 transition-colors"
-                        >
-                          <Linkedin className="w-4 h-4" />
-                          <span>LinkedIn</span>
-                        </a>
-                      )}
-                      {profile.github && (
-                        <a
-                          href={profile.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 bg-gray-900 hover:bg-gray-800 rounded-lg text-sm text-white transition-colors"
-                        >
-                          <Github className="w-4 h-4" />
-                          <span>GitHub</span>
-                        </a>
-                      )}
-                      {profile.twitter && (
-                        <a
-                          href={profile.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 rounded-lg text-sm text-sky-700 transition-colors"
-                        >
-                          <Twitter className="w-4 h-4" />
-                          <span>Twitter</span>
-                        </a>
-                      )}
-                      {profile.facebook && (
-                        <a
-                          href={profile.facebook}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg text-sm text-blue-600 transition-colors"
-                        >
-                          <Facebook className="w-4 h-4" />
-                          <span>Facebook</span>
-                        </a>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      <span>Tham gia từ {joinDate}</span>
-                    </div>
-                    {profile.learning_streak > 0 && (
-                      <div className="flex items-center gap-2">
-                        <Award className="w-4 h-4 text-orange-500" />
-                        <span className="font-semibold text-orange-600">
-                          🔥 {profile.learning_streak} ngày streak
-                        </span>
+              {/* Profile Info & Actions */}
+              <div className="flex-1 min-w-0 pt-2 sm:pt-4 w-full">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 mb-2.5">
+                  <div>
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h1 className="text-2xl sm:text-3xl font-black text-[#121212] dark:text-white tracking-tight">
+                        {profile.full_name}
+                      </h1>
+                      {/* Mobile Badge */}
+                      <div className="sm:hidden">
+                        {profile.membership_type === 'PRO' ? (
+                          <span className="px-2.5 py-0.5 rounded-full bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] text-[10px] font-black uppercase tracking-wider">
+                            PRO
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 rounded-full bg-stone-100 text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] text-[10px] font-black uppercase tracking-wider">
+                            Học viên
+                          </span>
+                        )}
                       </div>
-                    )}
-                    {profile.total_study_time > 0 && (
-                      <div className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-blue-500" />
-                        <span>
-                          {Math.floor(profile.total_study_time / 60)}h {profile.total_study_time % 60}m học tập
-                        </span>
-                      </div>
+                    </div>
+                    <p className="text-sm sm:text-base font-extrabold text-[#6B8045] dark:text-[#A7D170] mt-0.5">
+                      @{profile.username}
+                    </p>
+                  </div>
+
+                  {/* Actions (Settings button if viewing own profile) */}
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    {currentUser?.username === profile.username && (
+                      <Link
+                        href="/settings"
+                        className="px-4 py-2 rounded-full border-2 border-[#121212] bg-[#FFD23F] hover:bg-[#FFE072] text-[#121212] font-black text-xs sm:text-sm shadow-[2.5px_2.5px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] active:translate-y-0 active:shadow-[1px_1px_0_#121212] transition-all flex items-center gap-1.5"
+                      >
+                        <SettingsIcon className="w-3.5 h-3.5" />
+                        <span>Cài đặt tài khoản</span>
+                      </Link>
                     )}
                   </div>
+                </div>
+
+                {profile.bio && (
+                  <p className="text-stone-700 dark:text-stone-300 font-medium text-sm sm:text-base mb-3 max-w-3xl leading-relaxed">
+                    {profile.bio}
+                  </p>
+                )}
+
+                {/* Academic & Target score highlights if present */}
+                {(profile.university || profile.major || profile.target_score) && (
+                  <div className="flex flex-wrap gap-2 mb-3.5">
+                    {profile.target_score && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3CD] dark:bg-[#3D2C00] border-2 border-[#121212] text-xs font-black text-[#856404] dark:text-[#FFD23F] shadow-[1.5px_1.5px_0_#121212]">
+                        🎯 Mục tiêu TOEIC: {profile.target_score}
+                      </span>
+                    )}
+                    {profile.university && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-800 border-2 border-[#121212] dark:border-[#2F422B] text-xs font-black text-stone-800 dark:text-stone-200 shadow-[1.5px_1.5px_0_#121212]">
+                        🏛️ {profile.university}
+                      </span>
+                    )}
+                    {profile.major && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E0F2FE] dark:bg-[#082F49] border-2 border-[#121212] text-xs font-black text-[#0369A1] dark:text-[#38BDF8] shadow-[1.5px_1.5px_0_#121212]">
+                        📚 {profile.major}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {/* Social Links */}
+                {(profile.website || profile.linkedin || profile.github || profile.twitter || profile.facebook) && (
+                  <div className="flex flex-wrap gap-2.5 mb-3.5">
+                    {profile.website && (
+                      <a
+                        href={profile.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-white dark:bg-[#1B261A] border-2 border-[#121212] rounded-full text-xs font-black text-[#121212] dark:text-white shadow-[2px_2px_0_#121212] hover:-translate-y-0.5 hover:shadow-[3px_3px_0_#121212] transition-all"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        <span>Website</span>
+                      </a>
+                    )}
+                    {profile.github && (
+                      <a
+                        href={profile.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-[#121212] text-white border-2 border-[#121212] rounded-full text-xs font-black shadow-[2px_2px_0_#6B8045] hover:-translate-y-0.5 transition-all"
+                      >
+                        <Github className="w-3.5 h-3.5" />
+                        <span>GitHub</span>
+                      </a>
+                    )}
+                    {profile.linkedin && (
+                      <a
+                        href={profile.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-[#0284C7] text-white border-2 border-[#121212] rounded-full text-xs font-black shadow-[2px_2px_0_#121212] hover:-translate-y-0.5 transition-all"
+                      >
+                        <Linkedin className="w-3.5 h-3.5" />
+                        <span>LinkedIn</span>
+                      </a>
+                    )}
+                    {profile.facebook && (
+                      <a
+                        href={profile.facebook}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-[#2563EB] text-white border-2 border-[#121212] rounded-full text-xs font-black shadow-[2px_2px_0_#121212] hover:-translate-y-0.5 transition-all"
+                      >
+                        <Facebook className="w-3.5 h-3.5" />
+                        <span>Facebook</span>
+                      </a>
+                    )}
+                  </div>
+                )}
+
+                {/* Key metadata pills */}
+                <div className="flex flex-wrap gap-2.5 text-xs font-extrabold text-stone-700 dark:text-stone-300 pt-3 border-t-2 border-stone-200 dark:border-stone-800">
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-300 dark:border-stone-700">
+                    <Calendar className="w-3.5 h-3.5 text-stone-500" />
+                    <span>Tham gia từ {joinDate}</span>
+                  </div>
+                  {profile.learning_streak > 0 && (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF3CD] dark:bg-[#3D2C00] border-2 border-[#121212] text-[#856404] dark:text-[#FFD23F] shadow-[1.5px_1.5px_0_#121212]">
+                      <Award className="w-3.5 h-3.5" />
+                      <span>🔥 {profile.learning_streak} ngày streak</span>
+                    </div>
+                  )}
+                  {profile.total_study_time > 0 && (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#E0F2FE] dark:bg-[#082F49] border-2 border-[#121212] text-[#0369A1] dark:text-[#38BDF8] shadow-[1.5px_1.5px_0_#121212]">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{Math.floor(profile.total_study_time / 60)}h {profile.total_study_time % 60}m học tập</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -637,31 +652,38 @@ export default function UserProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white rounded-xl border border-gray-200">
+        <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[4px_4px_0_#121212] dark:shadow-[4px_4px_0_#0D150C] overflow-hidden">
           {/* Tab Headers */}
-          <div className="border-b border-gray-200">
-            <nav className="flex gap-1 p-2 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    flex-shrink-0 px-4 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap
-                    ${
-                      activeTab === tab.id
-                        ? "bg-primary/10 text-primary"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }
-                  `}
-                >
-                  {tab.label}
-                  {tab.count !== undefined && (
-                    <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              ))}
+          <div className="border-b-2 border-[#121212] dark:border-[#2F422B] bg-[#FFFDF9] dark:bg-[#151F14] p-3">
+            <nav className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100">
+              {tabs.map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`
+                      flex-shrink-0 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all whitespace-nowrap cursor-pointer
+                      ${
+                        isActive
+                          ? "bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2.5px_2.5px_0_#121212] -translate-y-0.5"
+                          : "text-stone-700 dark:text-stone-300 border-2 border-transparent hover:border-[#121212]/30 hover:bg-stone-200/50 dark:hover:bg-stone-800/50"
+                      }
+                    `}
+                  >
+                    {tab.label}
+                    {tab.count !== undefined && (
+                      <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-black ${
+                        isActive 
+                          ? "bg-[#121212] text-white" 
+                          : "bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 border border-stone-300 dark:border-stone-700"
+                      }`}>
+                        {tab.count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </nav>
           </div>
 
@@ -672,11 +694,11 @@ export default function UserProfilePage() {
                 {coursesLoading ? (
                   <div className="flex gap-4 overflow-x-auto pb-4">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex-shrink-0 w-80 bg-white rounded-lg border border-gray-200 overflow-hidden animate-pulse">
-                        <div className="h-40 bg-gray-200"></div>
+                      <div key={i} className="flex-shrink-0 w-80 bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 overflow-hidden animate-pulse">
+                        <div className="h-40 bg-stone-200 dark:bg-stone-800"></div>
                         <div className="p-4 space-y-3">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-2 bg-gray-100 rounded-full"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded w-3/4"></div>
+                          <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full"></div>
                         </div>
                       </div>
                     ))}
@@ -688,16 +710,16 @@ export default function UserProfilePage() {
                     onMouseMove={coursesDragScroll.handleMouseMove}
                     onMouseUp={coursesDragScroll.handleMouseUp}
                     onMouseLeave={coursesDragScroll.handleMouseLeave}
-                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 cursor-grab active:cursor-grabbing"
+                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100 cursor-grab active:cursor-grabbing"
                   >
                     {enrolledCourses.map((course) => {
                       const progressPercentage = Math.round(course.progress_percentage || 0);
                       
                       return (
                         <Link key={course.id} href={`/learn/${course.slug}`}>
-                          <div className="flex-shrink-0 w-80 h-full bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col cursor-pointer">
+                          <div className="flex-shrink-0 w-80 h-full bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[3.5px_3.5px_0_#121212] overflow-hidden flex flex-col cursor-pointer hover:-translate-y-1 hover:shadow-[5px_5px_0_#121212] transition-all">
                             {/* Thumbnail */}
-                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-primary to-purple-600 relative">
+                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-[#6B8045] to-[#46552B] relative border-b-2 border-[#121212] dark:border-[#2F422B]">
                               {course.thumbnail_url ? (
                                 <Image
                                   src={course.thumbnail_url}
@@ -707,46 +729,47 @@ export default function UserProfilePage() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <BookOpen className="w-12 h-12 text-white opacity-50" />
+                                  <BookOpen className="w-12 h-12 text-white/50" />
                                 </div>
                               )}
                               {/* Progress Badge */}
                               {course.is_completed ? (
-                                <div className="absolute top-2 right-2 bg-emerald-500 text-white px-2 py-1 rounded text-xs font-medium">
+                                <div className="absolute top-2.5 right-2.5 bg-[#00E599] text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] px-2.5 py-0.5 rounded-full text-xs font-black">
                                   ✓ Hoàn thành
                                 </div>
                               ) : (
-                                <div className="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded text-xs font-medium">
+                                <div className="absolute top-2.5 right-2.5 bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] px-2.5 py-0.5 rounded-full text-xs font-black">
                                   {progressPercentage}%
                                 </div>
                               )}
                             </div>
 
                             {/* Content */}
-                            <div className="p-4 flex-1 flex flex-col min-h-[140px]">
-                              {/* Title */}
-                              <p className="text-base font-bold text-gray-900 mb-3 line-clamp-2">
-                                {course.title}
-                              </p>
+                            <div className="p-4 flex-1 flex flex-col justify-between min-h-[140px]">
+                              <div>
+                                <p className="text-base font-black text-[#121212] dark:text-white mb-3 line-clamp-2 leading-snug">
+                                  {course.title}
+                                </p>
 
-                              {/* Progress Bar - Always show */}
-                              {!course.is_completed && (
-                                <div className="mb-3">
-                                  <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                                    <span>Tiến độ</span>
-                                    <span>{progressPercentage}%</span>
+                                {/* Progress Bar */}
+                                {!course.is_completed && (
+                                  <div className="mb-3">
+                                    <div className="flex items-center justify-between text-xs font-extrabold text-stone-600 dark:text-stone-300 mb-1.5">
+                                      <span>Tiến độ</span>
+                                      <span>{progressPercentage}%</span>
+                                    </div>
+                                    <div className="w-full bg-[#EAE5D9] dark:bg-stone-800 rounded-full h-2.5 border border-[#121212]/20 overflow-hidden">
+                                      <div
+                                        className="bg-[#6B8045] h-full rounded-full transition-all duration-300"
+                                        style={{ width: `${progressPercentage}%` }}
+                                      ></div>
+                                    </div>
                                   </div>
-                                  <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                    <div
-                                      className="bg-primary h-1.5 rounded-full"
-                                      style={{ width: `${progressPercentage}%` }}
-                                    ></div>
-                                  </div>
-                                </div>
-                              )}
+                                )}
+                              </div>
 
                               {/* Enrolled Date */}
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-auto pt-3 border-t border-gray-100">
+                              <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 dark:text-stone-400 pt-3 border-t-2 border-stone-100 dark:border-stone-800">
                                 <Calendar className="w-3.5 h-3.5" />
                                 <span>
                                   {new Date(course.enrolled_at).toLocaleDateString('vi-VN', {
@@ -763,10 +786,23 @@ export default function UserProfilePage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa có khóa học nào</h3>
-                    <p className="text-gray-600">Người dùng này chưa đăng ký khóa học nào</p>
+                  <div className="text-center py-14 px-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-[#121212] mx-auto mb-4">
+                      <BookOpen className="w-8 h-8 stroke-[2.5]" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
+                      Chưa có khóa học nào
+                    </h3>
+                    <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm max-w-md mx-auto mb-6">
+                      Học viên chưa đăng ký khóa học nào. Hãy khám phá ngay các khóa học chất lượng từ NikaLearn!
+                    </p>
+                    <Link
+                      href="/courses"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-[#121212] bg-[#6B8045] hover:bg-[#556834] text-white font-black text-sm shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] transition-all"
+                    >
+                      <span>Khám phá khóa học</span>
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                    </Link>
                   </div>
                 )}
               </>
@@ -777,11 +813,11 @@ export default function UserProfilePage() {
                 {completedCoursesLoading ? (
                   <div className="flex gap-4 overflow-x-auto pb-4">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex-shrink-0 w-80 bg-white rounded-lg border border-gray-200 overflow-hidden animate-pulse">
-                        <div className="h-40 bg-gray-200"></div>
+                      <div key={i} className="flex-shrink-0 w-80 bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 overflow-hidden animate-pulse">
+                        <div className="h-40 bg-stone-200 dark:bg-stone-800"></div>
                         <div className="p-4 space-y-3">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-2 bg-gray-100 rounded-full"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded w-3/4"></div>
+                          <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full"></div>
                         </div>
                       </div>
                     ))}
@@ -793,14 +829,14 @@ export default function UserProfilePage() {
                     onMouseMove={completedCoursesDragScroll.handleMouseMove}
                     onMouseUp={completedCoursesDragScroll.handleMouseUp}
                     onMouseLeave={completedCoursesDragScroll.handleMouseLeave}
-                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 cursor-grab active:cursor-grabbing"
+                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100 cursor-grab active:cursor-grabbing"
                   >
                     {completedCourses.map((course) => {
                       return (
                         <Link key={course.id} href={`/learn/${course.slug}`}>
-                          <div className="flex-shrink-0 w-80 h-full bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col cursor-pointer">
+                          <div className="flex-shrink-0 w-80 h-full bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[3.5px_3.5px_0_#121212] overflow-hidden flex flex-col cursor-pointer hover:-translate-y-1 hover:shadow-[5px_5px_0_#121212] transition-all">
                             {/* Thumbnail */}
-                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-primary to-purple-600 relative">
+                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-[#6B8045] to-[#46552B] relative border-b-2 border-[#121212] dark:border-[#2F422B]">
                               {course.thumbnail_url ? (
                                 <Image
                                   src={course.thumbnail_url}
@@ -810,38 +846,39 @@ export default function UserProfilePage() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <BookOpen className="w-12 h-12 text-white opacity-50" />
+                                  <BookOpen className="w-12 h-12 text-white/50" />
                                 </div>
                               )}
                               {/* Completed Badge */}
-                              <div className="absolute top-2 right-2 bg-emerald-500 text-white px-2 py-1 rounded text-xs font-medium">
-                                ✓ Hoàn thành
+                              <div className="absolute top-2.5 right-2.5 bg-[#00E599] text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] px-2.5 py-0.5 rounded-full text-xs font-black">
+                                ✓ Đã xong
                               </div>
                             </div>
 
                             {/* Content */}
-                            <div className="p-4 flex-1 flex flex-col min-h-[140px]">
-                              {/* Title */}
-                              <p className="text-base font-bold text-gray-900 mb-3 line-clamp-2">
-                                {course.title}
-                              </p>
+                            <div className="p-4 flex-1 flex flex-col justify-between min-h-[140px]">
+                              <div>
+                                <p className="text-base font-black text-[#121212] dark:text-white mb-2 line-clamp-2 leading-snug">
+                                  {course.title}
+                                </p>
 
-                              {/* Completed Date */}
-                              <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-3">
-                                <Calendar className="w-3.5 h-3.5" />
-                                <span>
-                                  {course.completed_at 
-                                    ? `Hoàn thành: ${new Date(course.completed_at).toLocaleDateString('vi-VN', {
-                                        day: '2-digit',
-                                        month: '2-digit',
-                                        year: 'numeric'
-                                      })}`
-                                    : 'Đã hoàn thành'}
-                                </span>
+                                {/* Completed Date */}
+                                <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 dark:text-stone-400 mb-3">
+                                  <Calendar className="w-3.5 h-3.5" />
+                                  <span>
+                                    {course.completed_at 
+                                      ? `Hoàn thành: ${new Date(course.completed_at).toLocaleDateString('vi-VN', {
+                                          day: '2-digit',
+                                          month: '2-digit',
+                                          year: 'numeric'
+                                        })}`
+                                      : 'Đã hoàn thành'}
+                                  </span>
+                                </div>
                               </div>
 
                               {/* View Certificate Button */}
-                              <div className="mt-auto pt-3 border-t border-gray-100">
+                              <div className="pt-3 border-t-2 border-stone-100 dark:border-stone-800">
                                 <button
                                   onClick={(e) => {
                                     e.preventDefault();
@@ -850,11 +887,11 @@ export default function UserProfilePage() {
                                       studentName: profile.full_name || profile.username,
                                       courseName: course.title,
                                       completionDate: new Date(course.completed_at || Date.now()).toLocaleDateString('vi-VN'),
-                                      instructorName: "DHVLearnX Instructor",
+                                      instructorName: "NikaLearn Instructor",
                                       courseDuration: "Unknown Duration"
                                     });
                                   }}
-                                  className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg text-sm font-medium transition-colors"
+                                  className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-[#FFD23F] hover:bg-[#FFE072] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] rounded-xl text-xs font-black transition-all cursor-pointer"
                                 >
                                   <Award className="w-4 h-4" />
                                   <span>Xem chứng chỉ</span>
@@ -867,12 +904,22 @@ export default function UserProfilePage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <Award className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <div className="text-center py-14 px-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-[#121212] mx-auto mb-4">
+                      <Award className="w-8 h-8 stroke-[2.5]" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
                       Chưa hoàn thành khóa học nào
                     </h3>
-                    <p className="text-gray-600">Hoàn thành khóa học để nhận chứng chỉ</p>
+                    <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm max-w-md mx-auto mb-6">
+                      Hoàn thành các bài học và bài kiểm tra để nhận chứng chỉ tốt nghiệp từ NikaLearn!
+                    </p>
+                    <button
+                      onClick={() => setActiveTab('enrolled')}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-[#121212] bg-[#FFD23F] hover:bg-[#FFE072] text-[#121212] font-black text-sm shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] transition-all cursor-pointer"
+                    >
+                      <span>Xem khóa đang học</span>
+                    </button>
                   </div>
                 )}
               </>
@@ -883,11 +930,11 @@ export default function UserProfilePage() {
                 {completedCoursesLoading ? (
                   <div className="flex gap-4 overflow-x-auto pb-4">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex-shrink-0 w-80 bg-white rounded-lg border border-gray-200 overflow-hidden animate-pulse">
-                        <div className="h-40 bg-gray-200"></div>
+                      <div key={i} className="flex-shrink-0 w-80 bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 overflow-hidden animate-pulse">
+                        <div className="h-40 bg-stone-200 dark:bg-stone-800"></div>
                         <div className="p-4 space-y-3">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-2 bg-gray-100 rounded-full"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded w-3/4"></div>
+                          <div className="h-2 bg-stone-100 dark:bg-stone-800 rounded-full"></div>
                         </div>
                       </div>
                     ))}
@@ -898,54 +945,54 @@ export default function UserProfilePage() {
                   >
                     {completedCourses.map((course) => {
                       return (
-                        <div key={course.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                          {/* Certificate Preview (Mock) */}
-                          <div className="relative h-48 bg-gray-50 border-b border-gray-100 flex items-center justify-center p-4 group cursor-pointer"
+                        <div key={course.id} className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[3.5px_3.5px_0_#121212] overflow-hidden hover:-translate-y-1 hover:shadow-[5px_5px_0_#121212] transition-all">
+                          {/* Certificate Preview */}
+                          <div 
+                            className="relative h-48 bg-[#FFF8E7] dark:bg-[#253323] border-b-2 border-[#121212] dark:border-[#2F422B] flex items-center justify-center p-4 group cursor-pointer"
                             onClick={() => {
                               setSelectedCertificate({
                                 studentName: profile.full_name || profile.username,
                                 courseName: course.title,
                                 completionDate: new Date(course.completed_at || Date.now()).toLocaleDateString('vi-VN'),
-                                instructorName: "DHVLearnX Instructor",
+                                instructorName: "NikaLearn Instructor",
                                 courseDuration: "Unknown Duration"
                               });
                             }}
                           >
-                            {/* Decorative Elements */}
-                            <div className="absolute inset-4 border-4 border-double border-yellow-600/20"></div>
-                            <div className="text-center">
-                              <Award className="w-12 h-12 text-yellow-600 mx-auto mb-2" />
-                              <div className="text-xs font-serif text-gray-500 uppercase tracking-widest">Certificate of Completion</div>
-                              <div className="font-bold text-gray-900 mt-1 line-clamp-1 px-4">{course.title}</div>
+                            <div className="absolute inset-4 border-2 border-dashed border-[#CA8A04]/40 rounded-xl pointer-events-none"></div>
+                            <div className="text-center relative z-10">
+                              <Award className="w-12 h-12 text-[#CA8A04] mx-auto mb-2 stroke-[2.5]" />
+                              <div className="text-[10px] font-black uppercase tracking-widest text-[#856404] dark:text-[#FFD23F]">Chứng nhận tốt nghiệp</div>
+                              <div className="font-black text-[#121212] dark:text-white mt-1 line-clamp-1 px-4">{course.title}</div>
                             </div>
                             
                             {/* Hover Overlay */}
-                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <span className="text-white font-medium flex items-center gap-2">
-                                <Eye className="w-5 h-5" />
-                                Xem chi tiết
+                            <div className="absolute inset-0 bg-[#121212]/75 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <span className="text-[#FFD23F] font-black flex items-center gap-2 text-sm">
+                                <Eye className="w-5 h-5 stroke-[2.5]" />
+                                Mở toàn màn hình
                               </span>
                             </div>
                           </div>
 
                           {/* Content */}
                           <div className="p-4">
-                            <h3 className="font-bold text-gray-900 mb-2 line-clamp-1">{course.title}</h3>
-                            <div className="flex items-center justify-between text-sm text-gray-500">
-                              <span>Cấp ngày: {new Date(course.completed_at || Date.now()).toLocaleDateString('vi-VN')}</span>
+                            <h3 className="font-black text-[#121212] dark:text-white mb-2 line-clamp-1">{course.title}</h3>
+                            <div className="flex items-center justify-between text-xs font-bold text-stone-500 dark:text-stone-400">
+                              <span>Cấp: {new Date(course.completed_at || Date.now()).toLocaleDateString('vi-VN')}</span>
                               <button 
                                 onClick={() => {
                                   setSelectedCertificate({
                                     studentName: profile.full_name || profile.username,
                                     courseName: course.title,
                                     completionDate: new Date(course.completed_at || Date.now()).toLocaleDateString('vi-VN'),
-                                    instructorName: "DHVLearnX Instructor",
+                                    instructorName: "NikaLearn Instructor",
                                     courseDuration: "Unknown Duration"
                                   });
                                 }}
-                                className="text-indigo-600 hover:text-indigo-700 font-medium"
+                                className="px-3 py-1 bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[1.5px_1.5px_0_#121212] rounded-lg font-black hover:-translate-y-0.5 transition-all cursor-pointer"
                               >
-                                Tải về
+                                Xem chứng chỉ
                               </button>
                             </div>
                           </div>
@@ -954,12 +1001,16 @@ export default function UserProfilePage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <Award className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <div className="text-center py-14 px-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-[#121212] mx-auto mb-4">
+                      <Award className="w-8 h-8 stroke-[2.5]" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
                       Chưa có chứng chỉ nào
                     </h3>
-                    <p className="text-gray-600">Hoàn thành khóa học để nhận chứng chỉ</p>
+                    <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm max-w-md mx-auto mb-6">
+                      Hoàn thành trọn vẹn một khóa học để sở hữu chứng chỉ hoàn thành từ NikaLearn!
+                    </p>
                   </div>
                 )}
               </>
@@ -970,11 +1021,11 @@ export default function UserProfilePage() {
                 {articlesLoading ? (
                   <div className="flex gap-4 overflow-x-auto pb-4">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex-shrink-0 w-80 bg-white rounded-lg border border-gray-200 overflow-hidden animate-pulse">
-                        <div className="h-40 bg-gray-200"></div>
+                      <div key={i} className="flex-shrink-0 w-80 bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 overflow-hidden animate-pulse">
+                        <div className="h-40 bg-stone-200 dark:bg-stone-800"></div>
                         <div className="p-4 space-y-3">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-4 bg-gray-200 rounded"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded w-3/4"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded"></div>
                         </div>
                       </div>
                     ))}
@@ -986,7 +1037,7 @@ export default function UserProfilePage() {
                     onMouseMove={articlesDragScroll.handleMouseMove}
                     onMouseUp={articlesDragScroll.handleMouseUp}
                     onMouseLeave={articlesDragScroll.handleMouseLeave}
-                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 cursor-grab active:cursor-grabbing"
+                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100 cursor-grab active:cursor-grabbing"
                   >
                     {articles.map((article) => {
                       const getCategories = (categoryNames: string | null) => {
@@ -1005,9 +1056,9 @@ export default function UserProfilePage() {
 
                       return (
                         <Link key={article.id} href={`/articles/${article.slug}`}>
-                          <div className="flex-shrink-0 w-80 h-full bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col cursor-pointer">
+                          <div className="flex-shrink-0 w-80 h-full bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[3.5px_3.5px_0_#121212] overflow-hidden flex flex-col cursor-pointer hover:-translate-y-1 hover:shadow-[5px_5px_0_#121212] transition-all">
                             {/* Cover Image */}
-                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-primary to-purple-600 relative">
+                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-[#6B8045] to-[#46552B] relative border-b-2 border-[#121212] dark:border-[#2F422B]">
                               {article.cover_image ? (
                                 <Image
                                   src={article.cover_image}
@@ -1017,7 +1068,7 @@ export default function UserProfilePage() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <FileText className="w-12 h-12 text-white opacity-50" />
+                                  <FileText className="w-12 h-12 text-white/50" />
                                 </div>
                               )}
                             </div>
@@ -1030,7 +1081,7 @@ export default function UserProfilePage() {
                                   {getCategories(article.category_names).map((cat, idx) => (
                                     <span
                                       key={idx}
-                                      className="px-2 py-0.5 bg-primary/10 text-primary rounded text-xs"
+                                      className="px-2.5 py-0.5 bg-[#FFF3CD] text-[#856404] border border-[#121212]/30 rounded-full text-[11px] font-black"
                                     >
                                       {cat}
                                     </span>
@@ -1039,17 +1090,17 @@ export default function UserProfilePage() {
                               )}
 
                               {/* Title */}
-                              <p className="text-base font-bold text-gray-900 mb-2 line-clamp-2">
+                              <p className="text-base font-black text-[#121212] dark:text-white mb-2 line-clamp-2 leading-snug">
                                 {article.title}
                               </p>
 
                               {/* Excerpt */}
-                              <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
+                              <p className="text-stone-600 dark:text-stone-400 font-medium text-xs mb-3 line-clamp-2 flex-1">
                                 {article.excerpt}
                               </p>
 
                               {/* Author & Date */}
-                              <div className="flex items-center justify-between text-xs text-gray-500 mb-2 pb-2 border-b border-gray-100">
+                              <div className="flex items-center justify-between text-xs font-bold text-stone-500 dark:text-stone-400 mb-2 pb-2 border-b-2 border-stone-100 dark:border-stone-800">
                                 <div className="flex items-center gap-1.5">
                                   {article.avatar_url ? (
                                     <Image
@@ -1057,20 +1108,20 @@ export default function UserProfilePage() {
                                       alt={article.full_name}
                                       width={20}
                                       height={20}
-                                      className="rounded-full"
+                                      className="rounded-full border border-[#121212]"
                                     />
                                   ) : (
-                                    <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white text-xs">
+                                    <div className="w-5 h-5 rounded-full bg-[#6B8045] flex items-center justify-center text-white text-[10px] font-black">
                                       {article.full_name?.charAt(0) || 'U'}
                                     </div>
                                   )}
-                                  <span className="font-medium">{article.full_name}</span>
+                                  <span className="font-extrabold text-stone-800 dark:text-stone-200">{article.full_name}</span>
                                 </div>
                                 <span>{formatDate(article.published_at)}</span>
                               </div>
 
                               {/* Stats */}
-                              <div className="flex items-center gap-3 text-xs text-gray-500">
+                              <div className="flex items-center gap-3 text-xs font-black text-stone-600 dark:text-stone-400">
                                 <div className="flex items-center gap-1">
                                   <Eye className="w-3.5 h-3.5" />
                                   <span>{article.view_count || 0}</span>
@@ -1091,10 +1142,23 @@ export default function UserProfilePage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa có bài viết nào</h3>
-                    <p className="text-gray-600">Người dùng này chưa xuất bản bài viết nào</p>
+                  <div className="text-center py-14 px-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-[#121212] mx-auto mb-4">
+                      <FileText className="w-8 h-8 stroke-[2.5]" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
+                      Chưa có bài viết nào
+                    </h3>
+                    <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm max-w-md mx-auto mb-6">
+                      Chia sẻ kiến thức lập trình, kinh nghiệm phỏng vấn và mẹo học tập của bạn cùng cộng đồng!
+                    </p>
+                    <Link
+                      href="/write"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-[#121212] bg-[#6B8045] hover:bg-[#556834] text-white font-black text-sm shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] transition-all"
+                    >
+                      <span>Viết bài đầu tiên</span>
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                    </Link>
                   </div>
                 )}
               </>
@@ -1105,11 +1169,11 @@ export default function UserProfilePage() {
                 {savedArticlesLoading ? (
                   <div className="flex gap-4 overflow-x-auto pb-4">
                     {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex-shrink-0 w-80 bg-white rounded-lg border border-gray-200 overflow-hidden animate-pulse">
-                        <div className="h-40 bg-gray-200"></div>
+                      <div key={i} className="flex-shrink-0 w-80 bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212]/15 shadow-[3px_3px_0_#121212]/10 overflow-hidden animate-pulse">
+                        <div className="h-40 bg-stone-200 dark:bg-stone-800"></div>
                         <div className="p-4 space-y-3">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-4 bg-gray-200 rounded"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded w-3/4"></div>
+                          <div className="h-4 bg-stone-200 dark:bg-stone-700 rounded"></div>
                         </div>
                       </div>
                     ))}
@@ -1121,7 +1185,7 @@ export default function UserProfilePage() {
                     onMouseMove={savedArticlesDragScroll.handleMouseMove}
                     onMouseUp={savedArticlesDragScroll.handleMouseUp}
                     onMouseLeave={savedArticlesDragScroll.handleMouseLeave}
-                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 cursor-grab active:cursor-grabbing"
+                    className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-stone-300 scrollbar-track-stone-100 cursor-grab active:cursor-grabbing"
                   >
                     {savedArticles.map((article) => {
                       const getCategories = (categoryNames: string | null) => {
@@ -1140,9 +1204,9 @@ export default function UserProfilePage() {
 
                       return (
                         <Link key={article.id} href={`/articles/${article.slug}`}>
-                          <div className="flex-shrink-0 w-80 h-full bg-white rounded-lg border border-gray-200 overflow-hidden flex flex-col cursor-pointer">
+                          <div className="flex-shrink-0 w-80 h-full bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] shadow-[3.5px_3.5px_0_#121212] overflow-hidden flex flex-col cursor-pointer hover:-translate-y-1 hover:shadow-[5px_5px_0_#121212] transition-all">
                             {/* Cover Image */}
-                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-primary to-purple-600 relative">
+                            <div className="h-40 flex-shrink-0 bg-gradient-to-r from-[#6B8045] to-[#46552B] relative border-b-2 border-[#121212] dark:border-[#2F422B]">
                               {article.cover_image ? (
                                 <Image
                                   src={article.cover_image}
@@ -1152,7 +1216,7 @@ export default function UserProfilePage() {
                                 />
                               ) : (
                                 <div className="w-full h-full flex items-center justify-center">
-                                  <FileText className="w-12 h-12 text-white opacity-50" />
+                                  <FileText className="w-12 h-12 text-white/50" />
                                 </div>
                               )}
                             </div>
@@ -1165,7 +1229,7 @@ export default function UserProfilePage() {
                                   {getCategories(article.category_names).map((cat, idx) => (
                                     <span
                                       key={idx}
-                                      className="px-2 py-0.5 bg-primary/10 text-primary rounded text-xs"
+                                      className="px-2.5 py-0.5 bg-[#FFF3CD] text-[#856404] border border-[#121212]/30 rounded-full text-[11px] font-black"
                                     >
                                       {cat}
                                     </span>
@@ -1174,17 +1238,17 @@ export default function UserProfilePage() {
                               )}
 
                               {/* Title */}
-                              <p className="text-base font-bold text-gray-900 mb-2 line-clamp-2">
+                              <p className="text-base font-black text-[#121212] dark:text-white mb-2 line-clamp-2 leading-snug">
                                 {article.title}
                               </p>
 
                               {/* Excerpt */}
-                              <p className="text-gray-600 text-sm mb-3 line-clamp-2 flex-1">
+                              <p className="text-stone-600 dark:text-stone-400 font-medium text-xs mb-3 line-clamp-2 flex-1">
                                 {article.excerpt}
                               </p>
 
                               {/* Author & Date */}
-                              <div className="flex items-center justify-between text-xs text-gray-500 mb-2 pb-2 border-b border-gray-100">
+                              <div className="flex items-center justify-between text-xs font-bold text-stone-500 dark:text-stone-400 mb-2 pb-2 border-b-2 border-stone-100 dark:border-stone-800">
                                 <div className="flex items-center gap-1.5">
                                   {article.avatar_url ? (
                                     <Image
@@ -1192,20 +1256,20 @@ export default function UserProfilePage() {
                                       alt={article.full_name}
                                       width={20}
                                       height={20}
-                                      className="rounded-full"
+                                      className="rounded-full border border-[#121212]"
                                     />
                                   ) : (
-                                    <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-white text-xs">
+                                    <div className="w-5 h-5 rounded-full bg-[#6B8045] flex items-center justify-center text-white text-[10px] font-black">
                                       {article.full_name?.charAt(0) || 'U'}
                                     </div>
                                   )}
-                                  <span className="font-medium">{article.full_name}</span>
+                                  <span className="font-extrabold text-stone-800 dark:text-stone-200">{article.full_name}</span>
                                 </div>
                                 <span>{formatDate(article.published_at)}</span>
                               </div>
 
                               {/* Stats */}
-                              <div className="flex items-center gap-3 text-xs text-gray-500">
+                              <div className="flex items-center gap-3 text-xs font-black text-stone-600 dark:text-stone-400">
                                 <div className="flex items-center gap-1">
                                   <Eye className="w-3.5 h-3.5" />
                                   <span>{article.view_count || 0}</span>
@@ -1226,10 +1290,23 @@ export default function UserProfilePage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">Chưa lưu bài viết nào</h3>
-                    <p className="text-gray-600">Người dùng này chưa lưu bài viết nào</p>
+                  <div className="text-center py-14 px-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] flex items-center justify-center text-[#121212] mx-auto mb-4">
+                      <Bookmark className="w-8 h-8 stroke-[2.5]" />
+                    </div>
+                    <h3 className="text-xl font-black text-[#121212] dark:text-white mb-2 tracking-tight">
+                      Chưa lưu bài viết nào
+                    </h3>
+                    <p className="text-stone-600 dark:text-stone-400 font-semibold text-sm max-w-md mx-auto mb-6">
+                      Lưu trữ các bài viết hay để dễ dàng tra cứu và ôn tập kiến thức bất cứ khi nào!
+                    </p>
+                    <Link
+                      href="/articles"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border-2 border-[#121212] bg-[#6B8045] hover:bg-[#556834] text-white font-black text-sm shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_#121212] transition-all"
+                    >
+                      <span>Khám phá bài viết</span>
+                      <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                    </Link>
                   </div>
                 )}
               </>

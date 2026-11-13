@@ -2,6 +2,8 @@
 
 import { Mail, Phone, MapPin, Facebook, Twitter, Youtube, Github } from "lucide-react";
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
+import PixelLandscapeBanner from "./Home/PixelLandscapeBanner";
 
 const footerLinks = {
   courses: [
@@ -34,64 +36,66 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer 
-      className="bg-gray-900 text-white pointer-events-none"
+      className="relative w-full bg-[#5C3A21] text-[#FFF8EE] pt-0 pb-12 mt-0"
       style={{
-        position: 'relative',
         zIndex: 30,
+        backgroundImage: "radial-gradient(rgba(0, 0, 0, 0.22) 1.5px, transparent 1.5px)",
+        backgroundSize: "16px 16px",
       }}
+      suppressHydrationWarning
     >
-      <div className="w-full px-6 md:px-12 py-12 pointer-events-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+      {/* Pixel Art Landscape Horizon (Trees, Slimes & Flowers on Grass) */}
+      <PixelLandscapeBanner />
+
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-20" suppressHydrationWarning>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <Link href="/" className="flex items-center justify-center transition-all duration-200 cursor-pointer">
-                <img
-                  src="/assets/img/logo.png" 
-                  alt="DHV LearnX Logo" 
-                  width={38}
-                  height={38}
-                  style={{ objectFit: 'contain' }}
-                  className="w-[38px] h-[38px] rounded-lg"
-                />
-              </Link>
+          <div className="space-y-4 lg:col-span-1">
+            <div className="flex items-center space-x-3">
+              <BrandLogo height={42} />
               <div>
-                <Link href="/" className="text-2xl font-[900]">LearnX</Link>
-                <p className="text-gray-400 text-small">Nền tảng học lập trình trực tuyến</p>
+                <Link href="/" className="text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#88A65B] to-[#FFD23F]">NIKA</span>
+                  <span>LEARN</span>
+                </Link>
+                <p className="text-[#FFF8EE]/60 text-xs font-semibold">Nền tảng luyện thi TOEIC</p>
               </div>
             </div>
             
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Nền tảng học lập trình hàng đầu Việt Nam.
+            <p className="text-[#FFF8EE]/70 text-sm leading-relaxed">
+              Nền tảng luyện thi TOEIC hàng đầu với phương pháp học tập tối ưu, giúp học viên chinh phục band điểm mơ ước mỗi năm.
             </p>
             
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                <Mail className="w-3.5 h-3.5" />
+            <div className="space-y-2 pt-2">
+              <div className="flex items-center space-x-2 text-[#FFF8EE]/70 text-sm">
+                <Mail className="w-3.5 h-3.5 text-[#FFD23F]" />
                 <span>huynhkhuanit@gmail.com</span>
               </div>
-              <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                <Phone className="w-3.5 h-3.5" />
+              <div className="flex items-center space-x-2 text-[#FFF8EE]/70 text-sm">
+                <Phone className="w-3.5 h-3.5 text-[#FFD23F]" />
                 <span>1900-xxxx</span>
               </div>
-              <div className="flex items-center space-x-2 text-gray-400 text-sm">
-                <MapPin className="w-3.5 h-3.5" />
+              <div className="flex items-center space-x-2 text-[#FFF8EE]/70 text-sm">
+                <MapPin className="w-3.5 h-3.5 text-[#FFD23F]" />
                 <span>Hồ Chí Minh, Việt Nam</span>
               </div>
             </div>
           </div>
 
-          {/* About DHV LearnX */}
+          {/* About NikaLearn */}
           <div>
-            <h4 className="font-semibold text-base mb-4">Về DHV LearnX</h4>
-            <ul className="space-y-2">
+            <h4 className="font-extrabold text-white text-base mb-4 relative inline-block">
+              Về NikaLearn
+              <span className="absolute -bottom-1.5 left-0 w-8 h-1 bg-[#6B8045] rounded-full"></span>
+            </h4>
+            <ul className="space-y-2.5">
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <Link href="/about" className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Giới thiệu
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+                <Link href="/contact" className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                   Liên hệ
                 </Link>
               </li>
@@ -100,11 +104,14 @@ export default function Footer() {
 
           {/* Courses */}
           <div>
-            <h4 className="font-semibold text-base mb-4">Lộ trình học</h4>
-            <ul className="space-y-2">
+            <h4 className="font-extrabold text-white text-base mb-4 relative inline-block">
+              Lộ trình học
+              <span className="absolute -bottom-1.5 left-0 w-8 h-1 bg-[#6B8045] rounded-full"></span>
+            </h4>
+            <ul className="space-y-2.5">
               {footerLinks.courses.map((link, index) => (
                 <li key={index}>
-                  <Link href={link.href} className="text-gray-400 hover:text-white transition-colors duration-200">
+                  <Link href={link.href} className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                     {link.name}
                   </Link>
                 </li>
@@ -114,11 +121,14 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="font-semibold text-base mb-4">Tài nguyên</h4>
-            <ul className="space-y-2">
+            <h4 className="font-extrabold text-white text-base mb-4 relative inline-block">
+              Tài nguyên
+              <span className="absolute -bottom-1.5 left-0 w-8 h-1 bg-[#6B8045] rounded-full"></span>
+            </h4>
+            <ul className="space-y-2.5">
               {footerLinks.resources.map((link, index) => (
                 <li key={index}>
-                  <Link href={link.href} className="text-gray-400 text-sm hover:text-white transition-colors duration-200">
+                  <Link href={link.href} className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block">
                     {link.name}
                   </Link>
                 </li>
@@ -128,13 +138,16 @@ export default function Footer() {
 
           {/* Community */}
           <div>
-            <h4 className="font-semibold text-base mb-4">Cộng đồng</h4>
-            <ul className="space-y-2 mb-4">
+            <h4 className="font-extrabold text-white text-base mb-4 relative inline-block">
+              Cộng đồng
+              <span className="absolute -bottom-1.5 left-0 w-8 h-1 bg-[#6B8045] rounded-full"></span>
+            </h4>
+            <ul className="space-y-2.5 mb-5">
               {footerLinks.community.map((link, index) => (
                 <li key={index}>
                   <Link 
                     href={link.href} 
-                    className="text-gray-400 text-sm hover:text-white transition-colors duration-200"
+                    className="text-[#FFF8EE]/70 hover:text-white hover:translate-x-1 transition-all duration-200 text-sm inline-block"
                     {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >
                     {link.name}
@@ -144,14 +157,14 @@ export default function Footer() {
             </ul>
             
             {/* Social Links */}
-            <div className="flex space-x-3">
+            <div className="flex space-x-2.5">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
                   aria-label={social.label}
                   {...(social.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center text-gray-400 hover:text-white hover:bg-gray-700 transition-all duration-200"
+                  className="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-[#FFF8EE]/80 flex items-center justify-center hover:bg-[#FFD23F] hover:text-[#121212] hover:border-[#121212] transition-all duration-200"
                 >
                   <social.icon className="w-4 h-4" />
                 </a>
@@ -161,19 +174,19 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between pointer-events-auto">
-          <div className="text-gray-400 text-xs mb-3 md:mb-0">
-            © 2025 DHV LearnX. All rights reserved.
+        <div className="border-t border-[#6B8045]/30 pt-6 flex flex-col md:flex-row items-center justify-between" suppressHydrationWarning>
+          <div className="text-[#FFF8EE]/60 text-xs mb-3 md:mb-0" suppressHydrationWarning>
+            © 2025 NikaLearn · Thiết kế lấy cảm hứng từ phong cách The IELTS Dictionary.
           </div>
           
-          <div className="flex space-x-4 text-xs">
-            <Link href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+          <div className="flex space-x-5 text-xs">
+            <Link href="#" className="text-[#FFF8EE]/60 hover:text-white transition-colors duration-200">
               Điều khoản sử dụng
             </Link>
-            <Link href="#" className="text-gray-400 hover:text-white transition-colors duration-200">
+            <Link href="#" className="text-[#FFF8EE]/60 hover:text-white transition-colors duration-200">
               Chính sách bảo mật
             </Link>
-            <Link href="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+            <Link href="/contact" className="text-[#FFF8EE]/60 hover:text-white transition-colors duration-200">
               Liên hệ
             </Link>
           </div>

@@ -201,7 +201,7 @@ function QAPageContent() {
         return "text-blue-600";
       case "OPEN":
       default:
-        return "text-gray-600";
+        return "text-muted-foreground";
     }
   };
 
@@ -212,27 +212,27 @@ function QAPageContent() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Vui lòng đăng nhập</h2>
-          <p className="text-gray-600">Bạn cần đăng nhập để xem câu hỏi</p>
+          <h2 className="text-2xl font-bold text-foreground mb-2">Vui lòng đăng nhập</h2>
+          <p className="text-muted-foreground">Bạn cần đăng nhập để xem câu hỏi</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <PageContainer size="lg" className="py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Sidebar */}
           <aside className="w-full lg:w-80 flex-shrink-0">
             {/* Header */}
             <div className="mb-6">
-              <h1 className="text-3xl font-[900] text-gray-900 mb-2">
+              <h1 className="text-3xl font-[900] text-foreground mb-2">
                 Hỏi và đáp
               </h1>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Kênh hỏi đáp riêng tư dành riêng cho học viên Pro.
               </p>
             </div>
@@ -275,10 +275,10 @@ function QAPageContent() {
             </div>
 
             {/* Most Helpful */}
-            <div className="bg-white border border-gray-200 rounded-lg p-4">
+            <div className="surface-panel rounded-lg p-4">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm font-semibold text-gray-700">Hữu ích nhất</h2>
-                <span className="text-xs text-gray-500">30 ngày qua</span>
+                <span className="text-xs text-muted-foreground">30 ngày qua</span>
               </div>
               {loadingMostHelpful ? (
                 <div className="space-y-3">
@@ -310,7 +310,7 @@ function QAPageContent() {
                       />
                       <div className="flex-1 min-w-0 flex items-center justify-between">
                         <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-sm font-medium text-gray-900 truncate">
+                          <span className="text-sm font-medium text-foreground truncate">
                             {user.fullName}
                           </span>
                           {user.isVerified && (
@@ -318,11 +318,11 @@ function QAPageContent() {
                           )}
                         </div>
                         <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
-                          <span className="text-sm text-gray-900 font-medium">
+                          <span className="text-sm text-foreground font-medium">
                             {user.contributions}
                           </span>
                           <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
-                            <CheckCircle className="w-3 h-3 text-gray-500" />
+                            <CheckCircle className="w-3 h-3 text-muted-foreground" />
                           </div>
                         </div>
                       </div>
@@ -331,7 +331,7 @@ function QAPageContent() {
                 </div>
               ) : (
                 <div className="text-center py-4">
-                  <p className="text-sm text-gray-500">Chưa có dữ liệu</p>
+                  <p className="text-sm text-muted-foreground">Chưa có dữ liệu</p>
                 </div>
               )}
             </div>
@@ -340,20 +340,20 @@ function QAPageContent() {
           {/* Main Content */}
           <main className="flex-1 min-w-0">
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Câu hỏi</h2>
+              <h2 className="text-xl font-semibold text-foreground">Câu hỏi</h2>
             </div>
 
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="text-gray-500">Đang tải...</div>
+                <div className="text-muted-foreground">Đang tải...</div>
               </div>
             ) : questions.length === 0 ? (
               <div className="text-center py-12">
                 <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   Không có câu hỏi nào
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   {searchQuery
                     ? "Thử thay đổi từ khóa tìm kiếm"
                     : "Chưa có câu hỏi nào trong danh mục này"}
@@ -364,7 +364,7 @@ function QAPageContent() {
                 {questions.map((question) => (
                   <div
                     key={question.id}
-                    className="bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors cursor-pointer"
+                    className="surface-panel rounded-lg p-4 hover:border-gray-300 transition-colors cursor-pointer"
                     onClick={() => {
                       router.push(`/discussions/${question.id}`);
                     }}
@@ -377,10 +377,10 @@ function QAPageContent() {
 
                       {/* Content */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                        <h3 className="font-semibold text-foreground mb-2 line-clamp-2">
                           {question.title}
                         </h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                           <AvatarWithProBadge
                             avatarUrl={question.user.avatarUrl}
                             fullName={question.user.fullName}
@@ -460,8 +460,8 @@ import { Suspense } from "react";
 export default function QAPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-500">Đang tải...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-muted-foreground">Đang tải...</div>
       </div>
     }>
       <QAPageContent />

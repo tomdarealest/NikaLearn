@@ -114,14 +114,14 @@ export default function SavedPage() {
   // Show loading state while checking authentication
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <div className="min-h-screen bg-gradient-to-br from-muted to-background">
         <PageContainer size="lg" className="py-12">
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-4 animate-pulse">
                 <Bookmark className="w-8 h-8 text-indigo-600" />
               </div>
-              <p className="text-gray-600">Đang kiểm tra xác thực...</p>
+              <p className="text-muted-foreground">Đang kiểm tra xác thực...</p>
             </div>
           </div>
         </PageContainer>
@@ -135,17 +135,17 @@ export default function SavedPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-muted to-background">
       <PageContainer size="lg" className="py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-4">
             <Bookmark className="w-8 h-8 text-indigo-600 fill-current" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Bài viết đã lưu
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Xem lại những bài viết bạn đã lưu để đọc sau
           </p>
         </div>
@@ -154,7 +154,7 @@ export default function SavedPage() {
         {isLoading && posts.length === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+              <div key={i} className="bg-card rounded-xl shadow-md overflow-hidden animate-pulse">
                 <div className="h-48 bg-gray-200"></div>
                 <div className="p-6 space-y-3">
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
@@ -172,10 +172,10 @@ export default function SavedPage() {
             <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
               <Bookmark className="w-12 h-12 text-gray-400" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-foreground mb-2">
               Chưa có bài viết nào được lưu
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               Bắt đầu lưu các bài viết yêu thích để xem lại sau
             </p>
             <Link
@@ -195,7 +195,7 @@ export default function SavedPage() {
                 <Link
                   key={post.id}
                   href={`/articles/${post.slug}`}
-                  className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden h-full flex flex-col cursor-pointer group"
+                  className="bg-card rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden h-full flex flex-col cursor-pointer group"
                 >
                   {/* Cover Image */}
                   <div className="relative h-48 bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden">
@@ -234,13 +234,13 @@ export default function SavedPage() {
                     )}
 
                     {/* Title */}
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                    <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                       {post.title}
                     </h3>
 
                     {/* Excerpt */}
                     {post.excerpt && (
-                      <p className="text-sm text-gray-600 mb-4 line-clamp-2 flex-1">
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1">
                         {post.excerpt}
                       </p>
                     )}
@@ -261,10 +261,10 @@ export default function SavedPage() {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 truncate">
+                        <p className="text-sm font-medium text-foreground truncate">
                           {post.author.full_name || post.author.username}
                         </p>
-                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
                           <span>{formatDate(post.published_at)}</span>
                         </div>
@@ -272,16 +272,16 @@ export default function SavedPage() {
                     </div>
 
                     {/* Stats */}
-                    <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 pt-4 border-t border-border">
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                         <Eye className="w-4 h-4" />
                         <span>{post.view_count.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                         <Heart className="w-4 h-4" />
                         <span>{post.like_count.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                         <MessageCircle className="w-4 h-4" />
                         <span>{post.comment_count.toLocaleString()}</span>
                       </div>

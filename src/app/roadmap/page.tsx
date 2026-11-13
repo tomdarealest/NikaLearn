@@ -102,7 +102,7 @@ const features = [
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
+    <div className="min-h-screen bg-background font-sans transition-colors duration-300">
       {/* Hero Section */}
       <div className="relative bg-gray-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10"></div>
@@ -158,7 +158,7 @@ export default function RoadmapPage() {
               transition={{ delay: index * 0.1 }}
             >
               <Link href={`/roadmap/${roadmap.id}`} className="block h-full group">
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
                   {/* Hover Gradient Border Effect */}
                   <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${roadmap.gradient} transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300`}></div>
                   
@@ -166,28 +166,28 @@ export default function RoadmapPage() {
                     <div className={`w-14 h-14 rounded-2xl ${roadmap.bgGradient} flex items-center justify-center text-${roadmap.color}-600 group-hover:scale-110 transition-transform duration-300`}>
                       <roadmap.icon className="w-7 h-7" />
                     </div>
-                    <div className="bg-gray-50 px-3 py-1 rounded-full text-xs font-semibold text-gray-500 group-hover:bg-gray-100 transition-colors">
+                    <div className="bg-muted px-3 py-1 rounded-full text-xs font-semibold text-muted-foreground group-hover:bg-gray-100 transition-colors">
                       {roadmap.stats.students} học viên
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-indigo-600 transition-colors">
                     {roadmap.title}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-6 line-clamp-2">
+                  <p className="text-muted-foreground text-sm mb-6 line-clamp-2">
                     {roadmap.description}
                   </p>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {roadmap.tags.map((tag, i) => (
-                      <span key={i} className="text-xs font-medium text-gray-500 bg-gray-50 px-2 py-1 rounded border border-gray-100">
+                      <span key={i} className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded border border-border">
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between pt-6 border-t border-gray-50 text-sm text-gray-500">
+                  <div className="flex items-center justify-between pt-6 border-t border-gray-50 text-sm text-muted-foreground">
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 mr-1.5" />
                       {roadmap.stats.duration}
@@ -204,11 +204,11 @@ export default function RoadmapPage() {
       </PageContainer>
 
       {/* Features Section */}
-      <div className="bg-white py-20 border-t border-gray-100">
+      <div className="bg-background py-20 border-t border-border transition-colors duration-300">
         <PageContainer size="lg">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Tại sao chọn DHVLearnX?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-foreground mb-4">Tại sao chọn NikaLearn?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Chúng tôi không chỉ cung cấp kiến thức, mà còn đồng hành cùng bạn trên con đường phát triển sự nghiệp.
             </p>
           </div>
@@ -226,8 +226,8 @@ export default function RoadmapPage() {
                 <div className={`w-16 h-16 mx-auto rounded-2xl ${feature.bg} flex items-center justify-center ${feature.color} mb-6 group-hover:scale-110 transition-transform duration-300`}>
                   <feature.icon className="w-8 h-8" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">
+                <h3 className="text-lg font-bold text-foreground mb-3">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
@@ -249,7 +249,7 @@ export default function RoadmapPage() {
               <p className="text-indigo-100 text-lg mb-10">
                 Tham gia cùng hàng nghìn học viên khác và bắt đầu xây dựng sự nghiệp mơ ước ngay hôm nay.
               </p>
-              <button className="px-10 py-4 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+              <button className="px-10 py-4 bg-card text-indigo-600 dark:text-indigo-400 font-bold rounded-xl hover:bg-muted transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 Đăng ký ngay - Miễn phí
               </button>
             </div>

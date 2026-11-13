@@ -1,0 +1,40 @@
+[
+  {
+    "url": "https://mautic.study4.com/mtc/event",
+    "data": {
+      "success": 1,
+      "id": "858668",
+      "sid": "zok6xlri6qfdlls2yqxnwwg",
+      "device_id": "zok6xlri6qfdlls2yqxnwwg",
+      "events": [
+        false
+      ]
+    }
+  },
+  {
+    "url": "https://mc.yandex.ru/watch/82192363?wmode=7&page-url=https%3A%2F%2Fstudy4.com%2Ftests%2F6852%2Fpractice%2F%3Fpart%3D19042%26part%3D19043%26part%3D19044%26part%3D19045%26part%3D19046%26part%3D19047%26part%3D19048%26time_limit%3D120%26layout%3D&page-ref=https%3A%2F%2Faccounts.google.com%2F&charset=utf-8&uah=chu%0A%22Not%3AA-Brand%22%3Bv%3D%228%22%2C%22Chromium%22%3Bv%3D%22156%22%0Acha%0Ax86%0Achb%0A64%0Achf%0A156.0.8078.4%0Achl%0A%22Not%3AA-Brand%22%3Bv%3D%228.0.0.0%22%2C%22Chromium%22%3Bv%3D%22156.0.8078.4%22%0Achm%0A%3F0%0Achp%0AWindows%0Achv%0A10.0&browser-info=pv%3A1%3Avf%3A4tvkupd2vg8oqolswznqbafd2pwhcv%3Afu%3A0%3Aen%3Autf-8%3Ala%3Aen-US%3Av%3A2672%3Acn%3A1%3Adp%3A0%3Als%3A1763786236272%3Ahid%3A770735446%3Az%3A420%3Ai%3A20261029142208%3Aet%3A1793258528%3Aetms%3A1793258528146%3Ac%3A1%3Arn%3A458684298%3Arqn%3A4%3Au%3A1793258201695643754%3Aw%3A1385x900%3As%3A1400x900x24%3Ask%3A1%3Afp%3A2576%3Ads%3A0%2C0%2C1305%2C14%2C1115%2C0%2C%2C333%2C10%2C%2C%2C%2C2789%3Aco%3A0%3Acpf%3A1%3Ans%3A1793258524993%3Agi%3AR0ExLjEuOTc2NTc1ODkuMTc5MzI1ODIwMA%3D%3D%3Amdd%3A0%3Aadb%3A2%3Arqnl%3A1%3Ast%3A1793258528%3At%3ATOEIC%20LR%20Collection%201%20Test%201%20-%20STUDY4&t=clt(648)gdpr(14)clc(0-0-0)rqnt(1)aw(1)nvt(0)rcm(0)cdl(na)eco(1654912)ti(1)",
+    "data": {
+      "settings": {
+        "auto_goals": 0,
+        "button_goals": 0,
+        "c_recp": "1.00000",
+        "form_goals": 0,
+        "pcs": "1",
+        "publisher": {
+          "schema": "json_ld"
+        },
+        "sbp": {
+          "a": "uZbYkXAqM+/I2JoM8dIj1bY+RCDaQLXpgzDQL5wNYwtFBLNHebyIndT2F8KLojey",
+          "b": "Trw40C0+LcaQJhscAglo4ZF93lw2tTb9S3IBeH2bPgh6mE1temfEczZeYNOZpyTa"
+        },
+        "eu": 0,
+        "region": "VN",
+        "hittoken": "1793258529_25ff2e981efa09e8938b87db16f46922576fcdf28ae8a4deca25ba0abe5086b9",
+        "wstoken": "11187.icnDd4e29kTTmQc-KK1IS7FRZJiOUmRdv7CAiDnvViEN_RyBaHjDAgh1VxhVw_WEzDcij9_gBfM1z5btYfYERfteXj8Bk4ylPtajXF6B23nyGImNMmhxJew6gpYYZRNFtPdizqx2KP5CvMsmoEwMw5JfvqyJMU95XWYDQ7u35J1Iqhuc-dpvWla-FOTR6gQuwwy2S6irrpmsrs-Bztpl6QQ8muXhBECUrELhK6_EkUrLj1YvBd9WOuKNwneCeZlY.z8KlDNZaHgO6fImu-jIkCRWEBd0,",
+        "hidv2": "6394040771427696838",
+        "ymclid": "6394040771427696838"
+      },
+      "userData": {}
+    }
+  }
+]

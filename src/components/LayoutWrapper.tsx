@@ -5,6 +5,7 @@ import Menu from "@/components/Menu";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ReactNode, useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function LayoutWrapper({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -14,30 +15,35 @@ export default function LayoutWrapper({ children }: { children: ReactNode }) {
     setMounted(true);
   }, []);
 
-  // Kiểm tra nếu đang ở trang admin (chính xác: /admin hoặc /admin/*)
   const isAdminPage = pathname === "/admin" || pathname?.startsWith("/admin/");
-  
-  // Kiểm tra nếu đang ở trang học tập (/learn/*)
   const isLearningPage = pathname?.startsWith("/learn/");
+  const isInterviewRoom = pathname?.startsWith("/interview/room/");
 
-  // Nếu là trang admin hoặc học tập, không hiển thị Menu, Header, Footer
-  // Admin layout và Learn layout sẽ tự quản lý layout của họ
-  if (isAdminPage || isLearningPage) {
+  if (isAdminPage || isLearningPage || isInterviewRoom) {
     return <>{children}</>;
   }
 
-  // Các trang khác (trang chủ, courses, etc.) hiển thị layout bình thường
   return (
-    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+    <div className="bg-background min-h-screen transition-colors duration-300 flex flex-col" suppressHydrationWarning>
       <Header />
       <Menu />
-      <main style={{ 
-        backgroundColor: '#ffffff', 
-        marginLeft: '96px',
-      }}>
-        {children}
+      <main
+        className="flex-1 bg-background transition-colors duration-300 md:ml-[88px] ml-0 pb-16 md:pb-0"
+        suppressHydrationWarning
+      >
+        <motion.div
+          key={pathname}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.16, ease: "easeOut" }}
+          className="w-full h-full min-h-[calc(100vh-64px)]"
+        >
+          {children}
+        </motion.div>
       </main>
-      <Footer />
+      <div className="md:ml-[88px] ml-0">
+        <Footer />
+      </div>
     </div>
   );
 }

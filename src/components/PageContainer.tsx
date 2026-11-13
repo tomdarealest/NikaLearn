@@ -8,14 +8,14 @@ interface PageContainerProps {
 
 const sizeClasses = {
   sm: "max-w-4xl",
-  md: "max-w-6xl",
+  md: "max-w-5xl",
   lg: "max-w-7xl",
-  full: "max-w-full"
+  full: "max-w-full",
 };
 
 export default function PageContainer({ children, size = "lg", className = "" }: PageContainerProps) {
   return (
-    <div className={`${sizeClasses[size]} mx-auto px-6 ${className}`}>
+    <div className={`w-full ${sizeClasses[size]} mx-auto px-4 sm:px-6 lg:px-8 ${className}`}>
       {children}
     </div>
   );

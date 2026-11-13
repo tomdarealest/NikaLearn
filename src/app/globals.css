@@ -1,4 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "./tiptap.css";
 
 @media print {
@@ -56,29 +58,69 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --primary: #6366f1;
+  --background: #FFFDF9;
+  --foreground: #121212;
+  --primary: #6B8045;
   --primary-foreground: #ffffff;
-  --primary-gradient-from: #6366f1;
-  --primary-gradient-to: #9333ea;
-  --secondary: #f8fafc;
-  --secondary-foreground: #475569;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #eef2ff;
-  --accent-foreground: #3730a3;
-  --destructive: #ef4444;
+  --primary-hover: #556834;
+  --primary-gradient-from: #6B8045;
+  --primary-gradient-to: #46552B;
+  --secondary: #FFD23F;
+  --secondary-foreground: #121212;
+  --muted: #F4EFE6;
+  --muted-foreground: #55614F;
+  --accent: #FF6B2C;
+  --accent-foreground: #ffffff;
+  --destructive: #D8261C;
   --destructive-foreground: #ffffff;
   --card: #ffffff;
-  --card-foreground: #1a1a1a;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #6366f1;
+  --card-foreground: #121212;
+  --border: #121212;
+  --input: #E4DFD3;
+  --ring: #6B8045;
+
+  /* Custom TID semantic tokens */
+  --herb: #6B8045;
+  --herb-light: #F2F6ED;
+  --moss: #1A2616;
+  --gleam: #FFD23F;
+  --radiate: #FF6B2C;
+  --pearl: #FFF8EE;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: #141C13;
+  --foreground: #F5F9F1;
+  --primary: #85A358;
+  --primary-foreground: #121212;
+  --primary-hover: #98B868;
+  --primary-gradient-from: #85A358;
+  --primary-gradient-to: #5A7538;
+  --secondary: #FFD23F;
+  --secondary-foreground: #121212;
+  --muted: #202D1E;
+  --muted-foreground: #98A892;
+  --accent: #FF7D45;
+  --accent-foreground: #ffffff;
+  --destructive: #F87171;
+  --destructive-foreground: #ffffff;
+  --card: #1B261A;
+  --card-foreground: #F5F9F1;
+  --border: #2F422B;
+  --input: #273723;
+  --ring: #85A358;
+
+  --herb: #85A358;
+  --herb-light: #202D1E;
+  --moss: #0E150D;
+  --gleam: #FFD23F;
+  --radiate: #FF7D45;
+  --pearl: #FFF8EE;
 }
 
 @theme inline {
-  --color-background: #ffffff;
+  --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
@@ -90,39 +132,70 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
-  --color-card: #ffffff;
+  --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --color-herb: #6B8045;
+  --color-herb-50: #F3F7EE;
+  --color-herb-100: #E4EED8;
+  --color-herb-200: #C9DEB4;
+  --color-herb-400: #88A65B;
+  --color-herb-500: #6B8045;
+  --color-herb-600: #556834;
+  --color-herb-700: #46552B;
+  --color-herb-800: #33401E;
+  --color-herb-900: #232D15;
+
+  --color-moss: #1A2616;
+  --color-moss-800: #141E11;
+  --color-moss-900: #0E150D;
+
+  --color-gleam: #FFD23F;
+  --color-radiate: #FF6B2C;
+  --color-pearl: #FFF8EE;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #1a1a1a;
-    --primary: #6366f1;
-    --primary-foreground: #ffffff;
-    --secondary: #f8fafc;
-    --secondary-foreground: #475569;
-    --muted: #f1f5f9;
-    --muted-foreground: #64748b;
-    --accent: #eef2ff;
-    --accent-foreground: #3730a3;
-    --destructive: #ef4444;
-    --destructive-foreground: #ffffff;
-    --card: #ffffff;
-    --card-foreground: #1a1a1a;
-    --border: #e2e8f0;
-    --input: #e2e8f0;
-    --ring: #6366f1;
+  :root:not(.dark) {
+    --background: #FFFDF9;
+    --foreground: #121212;
   }
 }
 
+/* Page layout utilities (dark-mode aware) */
+.page-shell {
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-hero {
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--muted) 80%, transparent), var(--background));
+}
+
+.surface-panel {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+}
+
+.surface-input {
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
 body {
-  background: #ffffff;
+  background: var(--background);
   color: var(--foreground);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -131,15 +204,6 @@ body {
 /* Smooth transitions for dark mode */
 html {
   transition: color-scheme 0.3s ease;
-}
-
-/* Dark mode classes - giữ background trắng */
-html.dark {
-  color-scheme: dark;
-}
-
-html.light {
-  color-scheme: light;
 }
 
 /* Enhanced transitions for all elements */
@@ -191,12 +255,104 @@ a, button {
   background: #94a3b8;
 }
 
-/* Grid pattern background for hero section */
+/* TID Signature Grid pattern background for hero section */
 .bg-grid-pattern {
+  background-color: var(--herb);
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
-  background-size: 20px 20px;
+    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-herb-grid {
+  background-color: #6B8045;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-cream-grid {
+  background-image:
+    linear-gradient(rgba(18, 18, 18, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 18, 18, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* TID Neo-Brutalist Shadows & Borders */
+.shadow-retro-sm {
+  box-shadow: 3px 3px 0 #121212;
+}
+
+.shadow-retro {
+  box-shadow: 5px 5px 0 #121212;
+}
+
+.shadow-retro-md {
+  box-shadow: 6px 6px 0 #121212;
+}
+
+.shadow-retro-lg {
+  box-shadow: 8px 8px 0 #121212;
+}
+
+.shadow-retro-xl {
+  box-shadow: 11px 11px 0 #121212;
+}
+
+.border-retro {
+  border: 2px solid #121212;
+}
+
+.border-retro-thick {
+  border: 3.5px solid #121212;
+}
+
+.btn-retro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  border: 2.5px solid #121212;
+  box-shadow: 4px 4px 0 #121212;
+  border-radius: 9999px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-retro:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #121212;
+}
+
+.btn-retro:active {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0 #121212;
+}
+
+.card-retro {
+  border: 3.5px solid #121212;
+  box-shadow: 7px 7px 0 #121212;
+  border-radius: 20px;
+  background-color: var(--card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-retro:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 11px 11px 0 #121212;
+}
+
+.stamp-retro {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  border: 2px solid #121212;
+  border-radius: 9999px;
+  padding: 0.25rem 0.75rem;
 }
 
 /* Line clamp utility */
@@ -1022,4 +1178,78 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
 /* Fill button with gradient on hover for "Bài tiếp theo" */
 .nav-button-wrapper-next:hover button {
   background: linear-gradient(to right, var(--primary-gradient-from), var(--primary-gradient-to));
+}
+
+/* Flashcard 3D flip */
+.flashcard-scene {
+  perspective: 1600px;
+  width: 100%;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  min-height: 27rem;
+  transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.34, 1.25, 0.64, 1);
+  will-change: transform;
+}
+
+@media (min-width: 640px) {
+  .flashcard-inner {
+    min-height: 28rem;
+  }
+}
+
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 640px) {
+  .flashcard-face {
+    padding: 1.75rem;
+  }
+}
+
+.flashcard-front {
+  transform: rotateY(0deg) translateZ(0);
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+  box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.07), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+.flashcard-back {
+  transform: rotateY(180deg) translateZ(0);
+  background: var(--card);
+  border: 1.5px solid color-mix(in srgb, var(--primary) 40%, var(--border));
+  box-shadow: 0 20px 40px -10px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+
+.flashcard-rating-enter {
+  animation: flashcard-rating-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes flashcard-rating-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }

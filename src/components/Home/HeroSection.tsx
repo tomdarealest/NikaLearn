@@ -8,6 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/contexts/ToastContext";
 import { useAuth } from "@/contexts/AuthContext";
+import AnimatedSunMascot from "./AnimatedSunMascot";
+import BottomCloudWaves from "./BottomCloudWaves";
 
 interface Course {
   id: string;
@@ -228,175 +230,57 @@ export default function HeroSection() {
   );
 
   return (
-    <section className="relative w-full bg-white overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-50 via-white to-white opacity-70"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-grid-pattern opacity-[0.03]"></div>
+    <section className="relative w-full bg-[#6B8045] text-white overflow-hidden transition-colors duration-300">
+      {/* TID Signature Grid pattern background */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0" 
+        style={{
+          backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.15) 1px, transparent 1px)",
+          backgroundSize: "32px 32px"
+        }}
+      />
       
-      {/* Decorative Blobs */}
-      <div className="absolute top-20 right-0 -translate-y-1/2 translate-x-1/3 w-[500px] h-[500px] bg-purple-200/30 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/4 w-[400px] h-[400px] bg-indigo-200/30 rounded-full blur-3xl"></div>
+      {/* Subtle organic light accent */}
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
 
-      <PageContainer size="lg" className="relative pt-12 pb-20 sm:pt-16 sm:pb-24 lg:pt-24 lg:pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+      <PageContainer size="lg" className="relative max-w-[1360px] mx-auto px-6 sm:px-10 lg:px-12 pt-12 sm:pt-16 lg:pt-20 pb-0 z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center min-h-[440px] sm:min-h-[500px] lg:min-h-[560px]">
           
-          {/* Left Column: Content */}
+          {/* Left Column: Tiêu đề "Nền tảng Luyện thi TOEIC" đưa xích vào giữa hài hòa, không bị dính sát mép trái */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col items-start text-left z-10"
+            className="lg:col-span-7 flex flex-col justify-center items-start lg:pl-10 xl:pl-16 text-left z-10 py-10 sm:py-14 lg:py-20"
           >
-            <div className="inline-flex items-center space-x-2 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1 mb-6">
-              <span className="flex h-2 w-2 rounded-full bg-indigo-600 animate-pulse"></span>
-              <span className="text-xs font-medium text-indigo-700 uppercase tracking-wide">Nền tảng học lập trình trực tuyến</span>
+            {/* Dòng 1: "Nền tảng" + Badge NIKALEARN màu vàng tươi nổi bật */}
+            <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+              <span className="text-4xl sm:text-6xl lg:text-7xl xl:text-[80px] font-black text-white tracking-tight leading-none">
+                Nền tảng
+              </span>
+              <span className="bg-[#FFD23F] text-[#121212] border-2 sm:border-[2.5px] border-[#121212] shadow-[3px_3px_0_#121212] text-xs sm:text-sm lg:text-base font-black px-3.5 sm:px-4 py-1 sm:py-1.5 rounded-full uppercase tracking-wider">
+                NIKALEARN
+              </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 leading-[1.15] mb-6 tracking-tight">
-              Khởi đầu hành trình <br className="hidden sm:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Công nghệ</span> của bạn
-            </h1>
-
-            <p className="text-lg text-gray-600 mb-8 max-w-lg leading-relaxed">
-              Truy cập hơn 100+ khóa học chất lượng cao từ các chuyên gia hàng đầu. 
-              Học mọi lúc, mọi nơi và xây dựng sự nghiệp vững chắc.
-            </p>
-
-            <div className="flex flex-wrap gap-4 mb-10">
-              <button 
-                onClick={() => {
-                  const element = document.getElementById('courses-section');
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
-                className="group relative px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg shadow-indigo-200 transition-all hover:shadow-indigo-300 hover:-translate-y-0.5 flex items-center space-x-2"
-              >
-                <span>Khám phá khóa học</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              
-              <button 
-                onClick={() => router.push('/roadmap')}
-                className="px-6 py-3 bg-white border border-gray-200 hover:border-indigo-200 text-gray-700 hover:text-indigo-600 font-semibold rounded-xl transition-all hover:bg-indigo-50 flex items-center space-x-2"
-              >
-                <BookOpen className="w-4 h-4" />
-                <span>Lộ trình học</span>
-              </button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 w-full max-w-md pt-6 border-t border-gray-100">
-              <div>
-                <p className="text-2xl font-bold text-gray-900">10k+</p>
-                <p className="text-sm text-gray-500">Học viên</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">50+</p>
-                <p className="text-sm text-gray-500">Giảng viên</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-gray-900">4.8</p>
-                <div className="flex items-center space-x-1">
-                  <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                  <p className="text-sm text-gray-500">Đánh giá</p>
-                </div>
-              </div>
+            {/* Dòng 2: "Luyện thi TOEIC" chữ lớn đóng khung viền mờ bo góc */}
+            <div className="relative inline-block">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[82px] xl:text-[98px] font-black text-white tracking-tight leading-[1.05] px-4 sm:px-7 lg:px-8 py-2 sm:py-3.5 lg:py-4 border-2 sm:border-[3px] border-white/50 rounded-2xl sm:rounded-3xl lg:rounded-[36px] bg-white/10 backdrop-blur-md shadow-lg whitespace-nowrap">
+                Luyện thi TOEIC
+              </h1>
             </div>
           </motion.div>
 
-          {/* Right Column: Carousel */}
-          <div className="relative w-full max-w-lg mx-auto lg:max-w-none lg:mx-0 h-[400px] sm:h-[450px] flex items-center justify-center">
-            {/* Abstract Background behind card */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 rounded-[2rem] -rotate-6 scale-90 opacity-50 blur-sm"></div>
-            
-            <div className="relative w-full h-full z-10">
-              {loading ? (
-                <SkeletonCard />
-              ) : courses.length === 0 ? (
-                <div className="flex items-center justify-center h-full bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-                  <p className="text-gray-500">Chưa có khóa học nào</p>
-                </div>
-              ) : (
-                <div className="relative w-full h-full flex items-center justify-center">
-                  <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                    <motion.div
-                      key={`${currentIndex}-${slideKey}`}
-                      custom={direction}
-                      variants={slideVariants}
-                      initial="enter"
-                      animate="center"
-                      exit="exit"
-                      transition={{
-                        x: { type: "spring", stiffness: 300, damping: 30 },
-                        opacity: { duration: 0.2 },
-                        scale: { duration: 0.2 },
-                      }}
-                      drag="x"
-                      dragConstraints={{ left: 0, right: 0 }}
-                      dragElastic={1}
-                      onDragStart={() => setIsDragging(true)}
-                      onDragEnd={(e, { offset, velocity }) => {
-                        const swipe = swipePower(offset.x, velocity.x);
-                        if (swipe < -swipeConfidenceThreshold) {
-                          paginate(1);
-                        } else if (swipe > swipeConfidenceThreshold) {
-                          paginate(-1);
-                        }
-                        setTimeout(() => setIsDragging(false), 200);
-                      }}
-                      className="absolute w-full max-w-[380px]"
-                    >
-                      <CourseCard 
-                        course={courses[currentIndex]} 
-                        featured={courses[currentIndex].featured}
-                        isDragging={isDragging}
-                        onEnroll={() => handleEnroll(courses[currentIndex])}
-                        onProClick={() => handleProCourseClick(courses[currentIndex])}
-                        isEnrolling={enrollingCourse === courses[currentIndex].id}
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* Navigation Buttons */}
-                  <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex items-center space-x-4">
-                    <button
-                      onClick={() => paginate(-1)}
-                      className="p-3 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-md transition-all"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-                    
-                    <div className="flex space-x-2">
-                      {courses.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => {
-                            const dir = index > currentIndex ? 1 : -1;
-                            setDirection(dir);
-                            setCurrentIndex(index);
-                          }}
-                          className={`h-2 rounded-full transition-all duration-300 ${
-                            index === currentIndex ? "w-8 bg-indigo-600" : "w-2 bg-gray-300 hover:bg-gray-400"
-                          }`}
-                        />
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => paginate(1)}
-                      className="p-3 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-md transition-all"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+          {/* Right Column: Animated Sun Mascot (Ông mặt trời The IELTS Dictionary style đặt sát chân sóng) */}
+          <div className="lg:col-span-5 relative w-full flex items-end justify-center lg:justify-end z-10 self-end overflow-visible">
+            <AnimatedSunMascot />
           </div>
 
         </div>
       </PageContainer>
+
+      {/* Chân mây bọt sóng trắng viền đen uốn lượn dưới đáy banner */}
+      <BottomCloudWaves />
     </section>
   );
 }
@@ -485,7 +369,7 @@ function CourseCard({
 
   return (
     <div 
-      className={`bg-white rounded-2xl shadow-xl shadow-indigo-100/50 overflow-hidden border border-gray-100 transition-transform duration-300 hover:shadow-2xl hover:shadow-indigo-200/50 ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'}`}
+      className={`bg-white text-[#121212] rounded-[22px] border-[3.5px] border-[#121212] shadow-[8px_8px_0_#121212] hover:shadow-[11px_11px_0_#121212] hover:-translate-x-[2px] hover:-translate-y-[2px] overflow-hidden transition-all duration-300 ${isDragging ? 'cursor-grabbing' : 'cursor-pointer'}`}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
@@ -493,7 +377,7 @@ function CourseCard({
       onMouseLeave={handleMouseUp}
     >
       {/* Image Header */}
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="relative h-48 w-full overflow-hidden border-b-[3px] border-[#121212]">
         {course.thumbnailUrl ? (
           <img
             src={course.thumbnailUrl}
@@ -501,14 +385,14 @@ function CourseCard({
             className={`w-full h-full object-cover transition-transform duration-500 hover:scale-105 ${isEnrolling ? 'opacity-50' : ''}`}
           />
         ) : (
-          <div className={`w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center ${isEnrolling ? 'opacity-50' : ''}`}>
-            <Sparkles className="w-12 h-12 text-white/50" />
+          <div className={`w-full h-full bg-[#6B8045] flex items-center justify-center ${isEnrolling ? 'opacity-50' : ''}`}>
+            <Sparkles className="w-12 h-12 text-[#FFD23F]" />
           </div>
         )}
         
         {/* Loading overlay when enrolling */}
         {isEnrolling && (
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-10">
+          <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
             <div className="text-white text-center">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mx-auto mb-2"></div>
               <div className="text-xs font-semibold opacity-90">
@@ -521,50 +405,50 @@ function CourseCard({
         {/* Overlay Badges */}
         <div className="absolute top-3 left-3 flex gap-2">
           {featured && (
-            <span className="px-2 py-1 bg-yellow-400/90 backdrop-blur-sm text-yellow-900 text-xs font-bold rounded-lg shadow-sm flex items-center gap-1">
+            <span className="px-2.5 py-1 bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] text-xs font-black uppercase rounded-full flex items-center gap-1">
               <Star className="w-3 h-3 fill-current" /> Nổi bật
             </span>
           )}
-          <span className="px-2 py-1 bg-black/50 backdrop-blur-sm text-white text-xs font-medium rounded-lg">
+          <span className="px-2.5 py-1 bg-[#6B8045] text-white border-2 border-[#121212] shadow-[2px_2px_0_#121212] text-xs font-bold rounded-full">
             {levelDisplay}
           </span>
         </div>
 
         {/* Play Button Overlay */}
         <div className="absolute inset-0 bg-black/0 hover:bg-black/10 transition-colors flex items-center justify-center group">
-          <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300">
-            <PlayCircle className="w-6 h-6 text-indigo-600 fill-indigo-50" />
+          <div className="w-12 h-12 bg-[#FFD23F] border-2 border-[#121212] shadow-[3px_3px_0_#121212] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300">
+            <PlayCircle className="w-6 h-6 text-[#121212] fill-white" />
           </div>
         </div>
       </div>
 
       {/* Content Body */}
-      <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight min-h-[3rem]">
+      <div className="p-5 bg-white">
+        <h3 className="text-lg font-black text-[#121212] mb-2 line-clamp-2 leading-tight min-h-[3rem]">
           {course.title}
         </h3>
 
         <div className="flex items-center gap-2 mb-4">
           {course.instructor?.avatar ? (
-             <img src={course.instructor.avatar} alt="" className="w-6 h-6 rounded-full" />
+             <img src={course.instructor.avatar} alt="" className="w-6 h-6 rounded-full border border-[#121212]" />
           ) : (
-            <div className="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-600">
+            <div className="w-6 h-6 rounded-full bg-[#6B8045]/20 border border-[#121212] flex items-center justify-center text-xs font-bold text-[#6B8045]">
               {course.instructor?.name?.[0] || "G"}
             </div>
           )}
-          <span className="text-sm text-gray-600 truncate max-w-[150px]">
+          <span className="text-sm font-semibold text-stone-700 truncate max-w-[150px]">
             {course.instructor?.name || "Giảng viên"}
           </span>
         </div>
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-50">
-          <div className="flex items-center gap-3 text-sm text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t-2 border-[#121212]/10">
+          <div className="flex items-center gap-3 text-xs font-bold text-stone-600">
             <div className="flex items-center gap-1">
-              <Users className="w-4 h-4" />
+              <Users className="w-4 h-4 text-[#6B8045]" />
               <span>{course.students.toLocaleString()}</span>
             </div>
             <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
+              <Clock className="w-4 h-4 text-[#6B8045]" />
               <span>{course.duration || "2h 30p"}</span>
             </div>
           </div>
@@ -572,15 +456,17 @@ function CourseCard({
           <div className="text-right">
             {course.isPro ? (
               <div className="flex flex-col items-end">
-                <span className="text-xs text-gray-400 line-through">
+                <span className="text-[11px] text-stone-400 font-bold line-through">
                   {new Intl.NumberFormat('vi-VN').format(calculatePricing(course.priceAmount).originalPrice)}₫
                 </span>
-                <span className="text-lg font-bold text-indigo-600">
+                <span className="text-lg font-black text-[#6B8045]">
                   {new Intl.NumberFormat('vi-VN').format(course.priceAmount)}₫
                 </span>
               </div>
             ) : (
-              <span className="text-lg font-bold text-green-600">Miễn phí</span>
+              <span className="inline-block bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] px-2.5 py-0.5 rounded-full text-xs font-black uppercase">
+                Miễn phí
+              </span>
             )}
           </div>
         </div>

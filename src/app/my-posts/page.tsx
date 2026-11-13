@@ -137,12 +137,12 @@ export default function MyPostsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <div className="min-h-screen bg-gradient-to-br from-muted to-background">
         <PageContainer size="lg" className="py-12">
           <div className="flex items-center justify-center min-h-[400px]">
             <div className="text-center">
               <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-              <p className="text-gray-600">Đang tải bài viết...</p>
+              <p className="text-muted-foreground">Đang tải bài viết...</p>
             </div>
           </div>
         </PageContainer>
@@ -155,7 +155,7 @@ export default function MyPostsPage() {
     : posts.filter((p) => p.status === filterStatus);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-muted to-background">
       <PageContainer size="lg" className="py-12">
         {/* Header */}
         <motion.div
@@ -166,10 +166,10 @@ export default function MyPostsPage() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-foreground mb-2">
                 Bài viết của tôi
               </h1>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Quản lý và theo dõi các bài viết bạn đã đăng
               </p>
             </div>
@@ -183,13 +183,13 @@ export default function MyPostsPage() {
           </div>
 
           {/* Filter Tabs */}
-          <div className="flex gap-2 border-b border-gray-200">
+          <div className="flex gap-2 border-b border-border">
             <button
               onClick={() => setFilterStatus("all")}
               className={`px-4 py-2 text-sm font-medium transition-colors duration-200 border-b-2 ${
                 filterStatus === "all"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               Tất cả ({posts.length})
@@ -199,7 +199,7 @@ export default function MyPostsPage() {
               className={`px-4 py-2 text-sm font-medium transition-colors duration-200 border-b-2 ${
                 filterStatus === "published"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               Đã xuất bản ({posts.filter((p) => p.status === "published").length})
@@ -209,7 +209,7 @@ export default function MyPostsPage() {
               className={`px-4 py-2 text-sm font-medium transition-colors duration-200 border-b-2 ${
                 filterStatus === "draft"
                   ? "border-primary text-primary"
-                  : "border-transparent text-gray-600 hover:text-gray-900"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
               }`}
             >
               Bản nháp ({posts.filter((p) => p.status === "draft").length})
@@ -227,14 +227,14 @@ export default function MyPostsPage() {
               className="text-center py-16"
             >
               <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 {filterStatus === "all"
                   ? "Chưa có bài viết nào"
                   : filterStatus === "published"
                   ? "Chưa có bài viết đã xuất bản"
                   : "Chưa có bản nháp nào"}
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-muted-foreground mb-6">
                 {filterStatus === "all"
                   ? "Bắt đầu viết bài đầu tiên của bạn ngay bây giờ!"
                   : "Hãy tạo bài viết mới để bắt đầu"}
@@ -260,7 +260,7 @@ export default function MyPostsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-primary/20 transition-all duration-300 cursor-pointer"
+                  className="bg-card rounded-xl border border-border overflow-hidden hover:border-primary/20 transition-all duration-300 cursor-pointer"
                 >
                   <Link 
                     href={`/articles/${post.slug}`}
@@ -294,20 +294,20 @@ export default function MyPostsPage() {
                       {/* Header */}
                       <div className="mb-4">
                         <div className="flex items-start justify-between gap-3 mb-2">
-                          <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors flex-1">
+                          <h3 className="text-xl font-bold text-foreground line-clamp-2 group-hover:text-primary transition-colors flex-1">
                             {post.title}
                           </h3>
                         </div>
                         {post.excerpt && (
-                          <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                          <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
                             {post.excerpt}
                           </p>
                         )}
                       </div>
 
                       {/* Meta Info - Modern Layout */}
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 mb-4">
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-gray-50 rounded-lg">
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-4">
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted rounded-lg">
                           <Calendar className="w-3.5 h-3.5" />
                           <span className="font-medium">
                             {post.published_at
@@ -315,11 +315,11 @@ export default function MyPostsPage() {
                               : formatDate(post.created_at)}
                           </span>
                         </div>
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted rounded-lg">
                           <Eye className="w-3.5 h-3.5" />
                           <span className="font-medium">{post.views_count || 0}</span>
                         </div>
-                        <div className="flex items-center gap-1.5 px-2 py-1 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-1.5 px-2 py-1 bg-muted rounded-lg">
                           <Heart className="w-3.5 h-3.5" />
                           <span className="font-medium">{post.likes_count || 0}</span>
                         </div>
@@ -332,7 +332,7 @@ export default function MyPostsPage() {
 
                       {/* Actions - Modern Button Design */}
                       <div 
-                        className="flex items-center gap-2 mt-auto pt-4 border-t border-gray-100"
+                        className="flex items-center gap-2 mt-auto pt-4 border-t border-border"
                         onClick={(e) => e.stopPropagation()}
                       >
                         {post.status === "published" && (

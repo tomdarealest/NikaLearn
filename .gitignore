@@ -47,3 +47,12 @@ next-env.d.ts
 
 # Supabase migration export (contains user data)
 /database/export/
+
+# Study4 Playwright Profile & Crawl temp
+.study4_browser_profile/
+study4_raw_page.html
+
+# Temp scripts with keys
+scratch_check.js
+*.mjs
+audios_test2/

@@ -119,24 +119,24 @@ export default function Modal({
         aria-labelledby={title ? "modal-title" : undefined}
       >
         <motion.div
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
-          className={`bg-white rounded-2xl shadow-2xl w-full ${sizeClasses[size]} ${className} max-h-[90vh] overflow-hidden flex flex-col`}
+          initial={{ scale: 0.95, opacity: 0, y: 15 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.95, opacity: 0, y: 15 }}
+          transition={{ type: "spring", duration: 0.4, bounce: 0.2 }}
+          className={`bg-[#FFFDF9] rounded-[24px] border-2 border-[#121212] shadow-[6px_6px_0_#121212] w-full ${sizeClasses[size]} ${className} max-h-[90vh] overflow-hidden flex flex-col`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           {(title || headerIcon || showCloseButton) && (
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-between px-6 py-4 border-b-2 border-[#121212] bg-[#F7F4EB]">
+              <div className="flex items-center space-x-3">
                 {headerIcon && (
                   <div className="flex-shrink-0">
                     {headerIcon}
                   </div>
                 )}
                 {title && (
-                  <div id="modal-title" className="modal-title text-gray-900 leading-tight">
+                  <div id="modal-title" className="text-lg font-black text-[#121212] tracking-tight leading-tight">
                     {title}
                   </div>
                 )}
@@ -144,17 +144,17 @@ export default function Modal({
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="flex-shrink-0 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  className="flex-shrink-0 w-8 h-8 bg-white hover:bg-[#FFD23F] border border-[#121212] rounded-full flex items-center justify-center transition-all duration-200 active:translate-y-0.5 cursor-pointer shadow-[1.5px_1.5px_0_#121212]"
                   aria-label="Đóng modal"
                 >
-                  <X className="w-4 h-4 text-gray-600" />
+                  <X className="w-4 h-4 text-[#121212]" />
                 </button>
               )}
             </div>
           )}
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6 md:p-7">
             {children}
           </div>
         </motion.div>
@@ -182,18 +182,18 @@ export function ModalButton({
   onClick?: () => void;
   className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const baseClasses = "inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseClasses = "inline-flex items-center justify-center font-extrabold rounded-full border-2 border-[#121212] transition-all duration-200 active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variantClasses = {
-    primary: "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white focus:ring-indigo-500",
-    secondary: "bg-gray-100 hover:bg-gray-200 text-gray-700 focus:ring-gray-500",
-    danger: "bg-red-500 hover:bg-red-600 text-white focus:ring-red-500",
+    primary: "bg-[#6B8045] hover:bg-[#1A2616] text-white shadow-[3px_3px_0_#121212] hover:shadow-[4px_4px_0_#121212]",
+    secondary: "bg-white hover:bg-[#FFF8EE] text-[#121212] shadow-[2px_2px_0_#121212]",
+    danger: "bg-[#D8261C] hover:bg-red-700 text-white shadow-[3px_3px_0_#121212]",
   };
 
   const sizeClasses = {
-    sm: "px-3 py-2 modal-button-text",
-    md: "px-4 py-3 modal-button-text",
-    lg: "px-6 py-4 modal-button-text",
+    sm: "px-4 py-2 text-xs",
+    md: "px-5 py-2.5 text-sm",
+    lg: "px-7 py-3.5 text-base",
   };
 
   return (

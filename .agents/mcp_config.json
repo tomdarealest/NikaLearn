@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "grapuco": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@grapuco/mcp"
+      ],
+      "env": {
+        "GRAPUCO_API_KEY": "gyc_sk_0fce86bac3e2501528bbda6e17817fbfb1704eef69739be899bfd259f5f8f11d"
+      }
+    }
+  }
+}

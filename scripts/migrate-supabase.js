@@ -415,7 +415,7 @@ async function generateMigration() {
   const oldClient = createClient(OLD_URL, OLD_KEY);
   const exportData = {};
   const schemaParts = [
-    '-- DHV LearnX database migration',
+    '-- NikaLearn database migration',
     '-- Run this in NEW Supabase → SQL Editor',
     'CREATE EXTENSION IF NOT EXISTS "pgcrypto";\n',
   ];

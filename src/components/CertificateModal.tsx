@@ -123,7 +123,7 @@ export default function CertificateModal({ isOpen, onClose, data, disableCelebra
           {/* Footer - Hidden on print */}
           <div className="p-6 border-t border-gray-100 bg-white flex justify-between items-center print:hidden">
             <div className="text-sm text-gray-500">
-              ID chứng chỉ: <span className="font-mono font-bold text-gray-700">DHV-{Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
+              ID chứng chỉ: <span className="font-mono font-bold text-gray-700">NIKA-{Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
             </div>
             <div className="flex gap-4">
               <button className="text-gray-500 hover:text-indigo-600 flex items-center gap-2 text-sm font-medium transition-colors">

@@ -10,7 +10,7 @@ export default function NotFound() {
   // Reset scroll position khi vào trang 404
   useEffect(() => {
     window.scrollTo(0, 0);
-    
+
     // Clear any search params nếu có
     if (window.history.replaceState) {
       const cleanUrl = window.location.pathname;
@@ -123,7 +123,7 @@ export default function NotFound() {
             <p className="text-xs text-gray-400">
               Cần hỗ trợ?{" "}
               <a
-                href="mailto:huynhkhuanit@gmail.com"
+                href="mailto:phuquoc13122005@gmail.com"
                 className="text-indigo-600 hover:text-indigo-700 font-medium underline"
               >
                 Liên hệ với chúng tôi

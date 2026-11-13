@@ -278,7 +278,7 @@ export default function ArticlesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-muted to-background">
       <PageContainer size="lg" className="py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -286,13 +286,13 @@ export default function ArticlesPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Bài viết{" "}
             <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               NỔI BẬT
             </span>
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
             Khám phá những bài viết được chia sẻ nhiều nhất từ cộng đồng học viên và tác giả
           </p>
 
@@ -304,7 +304,7 @@ export default function ArticlesPage() {
                 placeholder="Tìm kiếm bài viết..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                className="w-full pl-12 pr-4 py-3 border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               />
             </div>
           </div>
@@ -317,7 +317,7 @@ export default function ArticlesPage() {
               className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                 selectedCategory === null
                   ? "bg-indigo-500 text-white shadow-md"
-                  : "bg-white text-gray-600 border border-gray-200 hover:border-indigo-300"
+                  : "bg-white text-muted-foreground border border-border hover:border-indigo-300"
               }`}
             >
               Tất cả
@@ -329,7 +329,7 @@ export default function ArticlesPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                   selectedCategory === cat.id
                     ? "bg-indigo-500 text-white shadow-md"
-                    : "bg-white text-gray-600 border border-gray-200 hover:border-indigo-300"
+                    : "bg-white text-muted-foreground border border-border hover:border-indigo-300"
                 }`}
               >
                 {cat.name}
@@ -337,11 +337,11 @@ export default function ArticlesPage() {
             ))}
           </div>
 
-          <div className="flex gap-2 bg-white rounded-full p-1 border border-gray-200 shadow-sm">
+          <div className="flex gap-2 bg-white rounded-full p-1 border border-border shadow-sm">
             <button
               onClick={() => setViewMode("grid")}
               className={`p-2 rounded-full transition ${
-                viewMode === "grid" ? "bg-indigo-500 text-white" : "text-gray-600 hover:bg-gray-100"
+                viewMode === "grid" ? "bg-indigo-500 text-white" : "text-muted-foreground hover:bg-gray-100"
               }`}
               aria-label="Grid view"
             >
@@ -350,7 +350,7 @@ export default function ArticlesPage() {
             <button
               onClick={() => setViewMode("list")}
               className={`p-2 rounded-full transition ${
-                viewMode === "list" ? "bg-indigo-500 text-white" : "text-gray-600 hover:bg-gray-100"
+                viewMode === "list" ? "bg-indigo-500 text-white" : "text-muted-foreground hover:bg-gray-100"
               }`}
               aria-label="List view"
             >
@@ -362,7 +362,7 @@ export default function ArticlesPage() {
         {isLoading && (
           <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-6"}>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden animate-pulse">
+              <div key={i} className="bg-card rounded-xl shadow-lg overflow-hidden animate-pulse">
                 <div className={viewMode === "grid" ? "h-48" : "h-32"}>
                   <div className="w-full h-full bg-gray-200"></div>
                 </div>
@@ -397,7 +397,7 @@ export default function ArticlesPage() {
                 >
                   <Link href={`/articles/${article.slug}`}>
                     {viewMode === "grid" ? (
-                      <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden h-full flex flex-col cursor-pointer group">
+                      <div className="bg-card rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden h-full flex flex-col cursor-pointer group">
                         <div className="h-48 bg-gradient-to-r from-indigo-500 to-purple-600 relative overflow-hidden">
                           {article.cover_image ? (
                             <Image
@@ -418,7 +418,7 @@ export default function ArticlesPage() {
                             className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all ${
                               bookmarkedPosts.has(article.id)
                                 ? "bg-indigo-600/90 text-white"
-                                : "bg-white/90 text-gray-600 hover:bg-white"
+                                : "bg-white/90 text-muted-foreground hover:bg-white"
                             } ${bookmarkingPosts.has(article.id) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                             title={bookmarkedPosts.has(article.id) ? "Bỏ lưu" : "Lưu bài viết"}
                           >
@@ -439,13 +439,13 @@ export default function ArticlesPage() {
                             </div>
                           )}
 
-                          <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
+                          <h3 className="text-lg font-bold text-foreground mb-2 line-clamp-2">
                             {article.title}
                           </h3>
 
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-1">{article.excerpt}</p>
+                          <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-1">{article.excerpt}</p>
 
-                          <div className="flex items-center justify-between text-sm text-gray-500 mb-3 pb-3 border-b border-gray-200">
+                          <div className="flex items-center justify-between text-sm text-muted-foreground mb-3 pb-3 border-b border-border">
                             <div className="flex items-center gap-2">
                               {article.avatar_url ? (
                                 <Image
@@ -465,7 +465,7 @@ export default function ArticlesPage() {
                             <span>{formatDate(article.published_at)}</span>
                           </div>
 
-                          <div className="flex items-center gap-4 text-sm text-gray-500">
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1">
                               <Eye className="w-4 h-4" />
                               <span>{article.view_count}</span>
@@ -483,7 +483,7 @@ export default function ArticlesPage() {
                           {article.tag_names && (
                             <div className="flex flex-wrap gap-2 mt-3">
                               {getTags(article.tag_names).map((tag, idx) => (
-                                <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                <span key={idx} className="px-2 py-1 bg-gray-100 text-muted-foreground text-xs rounded-full">
                                   #{tag}
                                 </span>
                               ))}
@@ -492,7 +492,7 @@ export default function ArticlesPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden flex flex-col sm:flex-row cursor-pointer group">
+                      <div className="bg-card rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden flex flex-col sm:flex-row cursor-pointer group">
                         <div className="sm:w-64 h-48 sm:h-auto bg-gradient-to-r from-indigo-500 to-purple-600 relative overflow-hidden flex-shrink-0">
                           {article.cover_image ? (
                             <Image
@@ -513,7 +513,7 @@ export default function ArticlesPage() {
                             className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all ${
                               bookmarkedPosts.has(article.id)
                                 ? "bg-indigo-600/90 text-white"
-                                : "bg-white/90 text-gray-600 hover:bg-white"
+                                : "bg-white/90 text-muted-foreground hover:bg-white"
                             } ${bookmarkingPosts.has(article.id) ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                             title={bookmarkedPosts.has(article.id) ? "Bỏ lưu" : "Lưu bài viết"}
                           >
@@ -536,13 +536,13 @@ export default function ArticlesPage() {
                             )}
                           </div>
 
-                          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                          <h3 className="text-xl font-bold text-foreground mb-3 line-clamp-2">
                             {article.title}
                           </h3>
 
-                          <p className="text-gray-600 text-base mb-4 line-clamp-2 flex-1">{article.excerpt}</p>
+                          <p className="text-muted-foreground text-base mb-4 line-clamp-2 flex-1">{article.excerpt}</p>
 
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm text-gray-500 mb-3 pb-3 border-b border-gray-200">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-sm text-muted-foreground mb-3 pb-3 border-b border-border">
                             <div className="flex items-center gap-2">
                               {article.avatar_url ? (
                                 <Image
@@ -562,7 +562,7 @@ export default function ArticlesPage() {
                             <span>{formatDate(article.published_at)}</span>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500">
+                          <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
                             <div className="flex items-center gap-1.5">
                               <Eye className="w-4 h-4" />
                               <span>{article.view_count} lượt xem</span>
@@ -579,7 +579,7 @@ export default function ArticlesPage() {
                             {article.tag_names && (
                               <div className="flex flex-wrap gap-2 ml-auto">
                                 {getTags(article.tag_names).map((tag, idx) => (
-                                  <span key={idx} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                                  <span key={idx} className="px-2 py-1 bg-gray-100 text-muted-foreground text-xs rounded-full">
                                     #{tag}
                                   </span>
                                 ))}
@@ -599,8 +599,8 @@ export default function ArticlesPage() {
         {!isLoading && articles.length === 0 && (
           <div className="text-center py-12">
             <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Chưa có bài viết</h3>
-            <p className="text-gray-600 mb-6">
+            <h3 className="text-xl font-semibold text-foreground mb-2">Chưa có bài viết</h3>
+            <p className="text-muted-foreground mb-6">
               {searchQuery || selectedCategory
                 ? "Không tìm thấy bài viết phù hợp."
                 : "Hãy là người đầu tiên chia sẻ kiến thức!"}

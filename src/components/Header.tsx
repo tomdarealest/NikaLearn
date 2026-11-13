@@ -1,36 +1,34 @@
 "use client";
 
-import { Search, X, Sun, Moon, User, LogOut, FileText, Bookmark, Settings } from "lucide-react";
+import { User, LogOut, FileText, Bookmark, Settings } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useRouter } from "next/navigation";
-import LoginModal from "./LoginModal";
-import RegisterModal from "./RegisterModal";
+import AuthModal from "./AuthModal";
+import NotRegisteredModal from "./NotRegisteredModal";
 import AvatarWithProBadge from "./AvatarWithProBadge";
-
-import { removeVietnameseTones } from "@/lib/string-utils";
+import BrandLogo from "./BrandLogo";
+import ThemeToggle from "./ThemeToggle";
+import { supabase } from "@/lib/supabase";
 
 export default function Header() {
-  const [searchValue, setSearchValue] = useState("");
-  const [courses, setCourses] = useState<any[]>([]);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [isLoadingCourses, setIsLoadingCourses] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
-
-  const { theme, setTheme } = useTheme();
   const { user, isAuthenticated, logout, isLoading } = useAuth();
   const toast = useToast();
   const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
+  const [isNotRegisteredModalOpen, setIsNotRegisteredModalOpen] = useState(false);
+  const [notRegisteredEmail, setNotRegisteredEmail] = useState<string | null>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Đóng menu khi click bên ngoài
   useEffect(() => {
@@ -38,243 +36,144 @@ export default function Header() {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setShowUserMenu(false);
       }
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-        setShowResults(false);
-        setIsSearchFocused(false);
-      }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showUserMenu, showResults]);
+  }, [showUserMenu]);
 
-  const fetchCourses = async () => {
-    if (courses.length > 0) return;
-    
-    try {
-      setIsLoadingCourses(true);
-      const res = await fetch('/api/courses?limit=100');
-      const data = await res.json();
-      if (data.success) {
-        setCourses(data.data.courses);
+  // Listen for OAuth callback params
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const urlParams = new URLSearchParams(window.location.search);
+      const loginSuccess = urlParams.get("login_success");
+      const registerSuccess = urlParams.get("register_success");
+      const notRegistered = urlParams.get("not_registered");
+      const email = urlParams.get("email");
+      const authError = urlParams.get("auth_error");
+
+      if (notRegistered === "true") {
+        setNotRegisteredEmail(email);
+        setIsNotRegisteredModalOpen(true);
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (registerSuccess === "google") {
+        toast.success("Đăng ký tài khoản Google thành công! Chào mừng bạn.");
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (loginSuccess === "google") {
+        toast.success("Đăng nhập bằng tài khoản Google thành công! Chào mừng bạn.");
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else if (authError) {
+        toast.error(`Đăng nhập thất bại: ${decodeURIComponent(authError)}`);
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
-    } catch (error) {
-      console.error("Failed to fetch courses for search:", error);
-    } finally {
-      setIsLoadingCourses(false);
     }
-  };
+  }, [toast]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchValue(value);
-    
-    if (value.trim()) {
-      setShowResults(true);
-      const normalizedSearch = removeVietnameseTones(value.toLowerCase());
-      
-      const filtered = courses.filter(course => {
-        const normalizedTitle = removeVietnameseTones(course.title.toLowerCase());
-        return normalizedTitle.includes(normalizedSearch);
-      });
-      
-      setSearchResults(filtered.slice(0, 5)); // Limit to 5 results
-    } else {
-      setSearchResults([]);
-      setShowResults(false);
-    }
-  };
+  // Listen for client-side Supabase auth state change (for implicit flow or instant sync)
+  useEffect(() => {
+    if (!supabase) return;
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if ((event === "SIGNED_IN" || event === "USER_UPDATED") && session?.user && !isAuthenticated) {
+        const email = session.user.email;
+        if (!email) return;
 
-  const clearSearch = () => {
-    setSearchValue("");
-    setSearchResults([]);
-    setShowResults(false);
-  };
+        const intentCookie =
+          document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("google_auth_intent="))
+            ?.split("=")[1] || "login";
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (searchResults.length > 0) {
-        router.push(`/learn/${searchResults[0].slug}`);
-        setShowResults(false);
-        setSearchValue("");
+        try {
+          const res = await fetch("/api/auth/google/sync", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: session.user.email,
+              full_name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0],
+              avatar_url: session.user.user_metadata?.avatar_url,
+              intent: intentCookie,
+            }),
+          });
+          const data = await res.json();
+          if (data.notRegistered) {
+            setNotRegisteredEmail(data.email);
+            setIsNotRegisteredModalOpen(true);
+          } else if (data.success) {
+            window.location.reload();
+          }
+        } catch {
+          // Sync failed silently
+        }
       }
-    } else if (e.key === 'Escape') {
-      clearSearch();
-    }
-  };
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
-    await logout();
     setShowUserMenu(false);
-    toast.success("Đăng xuất thành công! Hẹn gặp lại bạn.");
-    router.push('/');
+    await logout();
+    toast.success("Đăng xuất thành công!");
+    router.push("/");
     router.refresh();
   };
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-white border-b border-gray-200">
-      <div className="mx-auto px-[28px] h-[66px] flex items-center justify-between" style={{ backgroundColor: '#ffffff' }}>
+    <header className="sticky top-0 z-50 w-full bg-[#FFFDF9] dark:bg-[#151F14] border-b-2 border-[#121212]/15 dark:border-[#2F422B] transition-colors duration-300 shadow-sm">
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-[64px] flex items-center justify-between bg-transparent transition-colors duration-300">
         {/* Logo Section */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center justify-center transition-all duration-200 cursor-pointer">
-            <img 
-              src="/assets/img/logo.png" 
-              alt="DHV LearnX Logo" 
-              width={38}
-              height={38}
-              style={{ objectFit: 'contain' }}
-              className="w-[38px] h-[38px] rounded-lg"
-            />
-          </Link>
-          <div className="hidden sm:block">
-            <Link href="/" className="text-2xl font-[900] text-foreground transition-colors duration-200 hover:text-primary">
-              LearnX
-            </Link>
-            <p className="text-small text-muted-foreground">Nền tảng học lập trình trực tuyến</p>
-          </div>
-        </div>
-
-        {/* Search Section */}
-        <div className="flex-1 max-w-2xl mx-4 hidden lg:block relative" ref={searchContainerRef}>
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Tìm kiếm khóa học, bài viết, video..."
-              value={searchValue}
-              onChange={handleSearchChange}
-              onFocus={() => {
-                setIsSearchFocused(true);
-                if (courses.length === 0) {
-                  fetchCourses();
-                }
-              }}
-              onKeyDown={handleKeyDown}
-              aria-label="Tìm kiếm"
-              className="w-full pl-12 pr-12 py-3 border border-border rounded-full text-card-foreground text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
-              style={{ backgroundColor: '#ffffff' }}
-            />
-            {searchValue && (
-              <span
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors duration-200"
-                onClick={clearSearch}
-                title="Xóa tìm kiếm"
-                aria-label="Xóa tìm kiếm"
+        <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
+          <BrandLogo height={38} />
+          <div>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Link
+                href="/"
+                prefetch={true}
+                className="text-xl sm:text-2xl font-black text-foreground tracking-tight transition-colors duration-200 hover:text-primary"
               >
-                <X className="h-5 w-5" />
+                NikaLearn
+              </Link>
+              <span className="bg-[#FFD23F] text-[#121212] border border-[#121212] shadow-[1.5px_1.5px_0_#121212] text-[8px] sm:text-[9px] font-black px-1 sm:px-1.5 py-0.5 rounded uppercase tracking-wider">
+                PRO
               </span>
-            )}
+            </div>
+            <p className="hidden sm:block text-xs font-semibold text-muted-foreground">
+              Nền tảng học lập trình trực tuyến
+            </p>
           </div>
-
-          {/* Search Results Dropdown */}
-          <AnimatePresence>
-            {showResults && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50 max-h-[400px] overflow-y-auto"
-              >
-                {isLoadingCourses ? (
-                  <div className="p-4 text-center text-gray-500 text-sm">
-                    Đang tải...
-                  </div>
-                ) : searchResults.length > 0 ? (
-                  <div className="py-2">
-                    <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Khóa học ({searchResults.length})
-                    </div>
-                    {searchResults.map((course) => (
-                      <Link
-                        key={course.id}
-                        href={`/learn/${course.slug}`}
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors"
-                        onClick={() => {
-                          setShowResults(false);
-                          setSearchValue("");
-                        }}
-                      >
-                        <div className="relative w-12 h-8 flex-shrink-0 rounded overflow-hidden bg-gray-100">
-                          {course.thumbnailUrl ? (
-                            <img
-                              src={course.thumbnailUrl}
-                              alt={course.title}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-primary/10 text-primary">
-                              <FileText className="w-4 h-4" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-gray-900 truncate">
-                            {course.title}
-                          </h4>
-                          <div className="flex items-center gap-2 text-xs text-gray-500">
-                            {course.instructor?.avatar && (
-                              <img
-                                src={course.instructor.avatar}
-                                alt={course.instructor.name}
-                                className="w-4 h-4 rounded-full"
-                              />
-                            )}
-                            <span className="truncate">{course.instructor?.name}</span>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : searchValue.trim() ? (
-                  <div className="p-8 text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 mb-3">
-                      <Search className="w-6 h-6 text-gray-400" />
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      Không tìm thấy kết quả cho "{searchValue}"
-                    </p>
-                  </div>
-                ) : (
-                   <div className="p-4 text-center text-gray-500 text-sm">
-                    Nhập từ khóa để tìm kiếm
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-3">
-          {/* Mobile search button */}
-          <Link href="#" className="lg:hidden p-2 rounded-xl text-muted-foreground hover:bg-muted transition-all duration-200 cursor-pointer">
-            <Search className="h-5 w-5" />
-          </Link>
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          <ThemeToggle />
 
           {/* Auth Buttons */}
-          <div className="hidden sm:flex items-center gap-2">
-            {isLoading ? (
-              // Loading skeleton - tránh flash
-              <div className="flex items-center gap-2">
-                <div className="w-32 h-10 bg-gray-100 rounded-full animate-pulse"></div>
-              </div>
+          <div className="flex items-center gap-1.5 sm:gap-2" suppressHydrationWarning>
+            {!mounted || isLoading ? (
+              <div className="w-20 sm:w-28 h-8 sm:h-9 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse" />
             ) : isAuthenticated && user ? (
               <div className="relative" ref={userMenuRef}>
                 <button
+                  type="button"
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-gray-100 transition-all duration-200"
+                  className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-3 py-1 sm:py-1.5 rounded-full hover:bg-muted transition-all duration-200 cursor-pointer border border-transparent hover:border-[#121212]/10"
                 >
                   <AvatarWithProBadge
                     avatarUrl={user?.avatar_url}
                     fullName={user?.full_name}
-                    isPro={user?.membership_type === 'PRO'}
+                    isPro={user?.membership_type === "PRO"}
                     size="xs"
                   />
-                  <span className="text-sm font-medium text-gray-700">{user?.username}</span>
+                  <span className="hidden sm:inline-block text-sm font-bold text-foreground max-w-[110px] truncate">
+                    {user?.username}
+                  </span>
                 </button>
 
                 <AnimatePresence>
@@ -284,25 +183,27 @@ export default function Header() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50"
+                      className="absolute right-0 mt-2 w-64 max-w-[calc(100vw-24px)] bg-card rounded-2xl shadow-2xl border-2 border-[#121212] overflow-hidden z-50"
                     >
-                      {/* User Info Header - 2 Columns */}
-                      <div className="px-4 py-4 border-b border-gray-100">
+                      {/* User Info Header */}
+                      <div className="px-4 py-3.5 border-b border-[#121212]/10 bg-[#F7F4EB] dark:bg-[#1B261A]">
                         <div className="flex items-start gap-3">
-                          {/* Avatar Column */}
                           <div className="flex-shrink-0">
                             <AvatarWithProBadge
                               avatarUrl={user?.avatar_url}
                               fullName={user?.full_name}
-                              isPro={user?.membership_type === 'PRO'}
+                              isPro={user?.membership_type === "PRO"}
                               size="md"
                             />
                           </div>
 
-                          {/* Info Column */}
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{user?.full_name}</p>
-                            <p style={{ fontSize: '14px' }} className="text-gray-500 truncate">@{user?.username}</p>
+                            <p className="text-sm font-black text-foreground truncate">
+                              {user?.full_name}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              @{user?.username}
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -311,51 +212,52 @@ export default function Header() {
                       <div className="py-1">
                         <Link
                           href={`/${user?.username}`}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          <User className="w-4 h-4" />
+                          <User className="w-4 h-4 text-[#6B8045]" />
                           <span>Trang cá nhân</span>
                         </Link>
                         <Link
                           href="/write"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          <FileText className="w-4 h-4" />
+                          <FileText className="w-4 h-4 text-[#6B8045]" />
                           <span>Viết blog</span>
                         </Link>
                         <Link
                           href="/my-posts"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          <FileText className="w-4 h-4" />
+                          <FileText className="w-4 h-4 text-[#6B8045]" />
                           <span>Bài viết của tôi</span>
                         </Link>
                         <Link
                           href="/saved"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          <Bookmark className="w-4 h-4" />
+                          <Bookmark className="w-4 h-4 text-[#6B8045]" />
                           <span>Bài viết đã lưu</span>
                         </Link>
                       </div>
 
                       {/* Settings & Logout */}
-                      <div className="border-t border-gray-100 py-1">
+                      <div className="border-t border-[#121212]/10 py-1">
                         <Link
                           href="/settings"
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
-                          <Settings className="w-4 h-4" />
+                          <Settings className="w-4 h-4 text-slate-500" />
                           <span>Cài đặt</span>
                         </Link>
                         <button
+                          type="button"
                           onClick={handleLogout}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
                         >
                           <LogOut className="w-4 h-4" />
                           <span>Đăng xuất</span>
@@ -368,15 +270,23 @@ export default function Header() {
             ) : (
               <>
                 <button
-                  onClick={() => setShowRegisterModal(true)}
-                  className="px-6 py-2.5 text-sm font-medium text-muted-foreground hover:text-primary transition-all duration-200 rounded-full cursor-pointer"
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode("register");
+                    setIsAuthModalOpen(true);
+                  }}
+                  className="hidden sm:inline-flex px-4 sm:px-5 py-2 text-sm font-extrabold text-foreground hover:text-primary transition-all duration-200 rounded-full cursor-pointer"
                 >
                   Đăng ký
                 </button>
 
                 <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="px-6 py-2.5 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all duration-200 shadow-lg cursor-pointer"
+                  type="button"
+                  onClick={() => {
+                    setAuthModalMode("login");
+                    setIsAuthModalOpen(true);
+                  }}
+                  className="px-3.5 sm:px-6 py-1.5 sm:py-2 text-xs sm:text-sm font-black bg-[#FFD23F] text-[#121212] border-2 border-[#121212] rounded-full shadow-[2px_2px_0_#121212] sm:shadow-[3px_3px_0_#121212] hover:-translate-y-0.5 hover:shadow-[5px_5px_0_#121212] active:translate-y-0 active:shadow-[1px_1px_0_#121212] transition-all cursor-pointer whitespace-nowrap"
                 >
                   Đăng nhập
                 </button>
@@ -386,23 +296,21 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Login Modal */}
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onSwitchToRegister={() => {
-          setShowLoginModal(false);
-          setShowRegisterModal(true);
-        }}
+      {/* Unified Auth Modal */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authModalMode}
       />
 
-      {/* Register Modal */}
-      <RegisterModal
-        isOpen={showRegisterModal}
-        onClose={() => setShowRegisterModal(false)}
-        onSwitchToLogin={() => {
-          setShowRegisterModal(false);
-          setShowLoginModal(true);
+      {/* Notice Popup when Google account is not registered yet */}
+      <NotRegisteredModal
+        isOpen={isNotRegisteredModalOpen}
+        onClose={() => setIsNotRegisteredModalOpen(false)}
+        email={notRegisteredEmail}
+        onGoToRegister={() => {
+          setAuthModalMode("register");
+          setIsAuthModalOpen(true);
         }}
       />
     </header>

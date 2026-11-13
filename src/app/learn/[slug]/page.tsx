@@ -23,6 +23,7 @@ import QuestionDetailModal from "@/components/QuestionDetailModal";
 import CodePlayground from "@/components/CodePlayground";
 import LearnCourseSidebar from "@/components/LearnCourseSidebar";
 import CertificateModal from "@/components/CertificateModal";
+import BrandLogo from "@/components/BrandLogo";
 import "@/app/markdown.css";
 import "@/app/markdown.css";
 
@@ -98,7 +99,7 @@ export default function LearnCoursePage() {
   const toast = useToast();
   
   // Update page title when course changes
-  usePageTitle(course ? `${course.title} - DHV LearnX` : "DHV LearnX");
+  usePageTitle(course ? `${course.title} - NikaLearn` : "NikaLearn");
   
   // Load markdown content when current lesson changes
   const markdownContent = useLessonContent(currentLesson?.id || "");
@@ -487,13 +488,9 @@ export default function LearnCoursePage() {
         <div className="flex items-center space-x-4 flex-1 min-w-0 h-full">
           <button
             onClick={() => router.push("/")}
-            className={`flex items-center space-x-2 ${isDarkTheme ? 'text-gray-300 hover:opacity-80' : 'text-gray-600 hover:opacity-80'} transition-opacity flex-shrink-0`}
+            className={`flex items-center ${isDarkTheme ? 'text-gray-300 hover:opacity-80' : 'text-gray-600 hover:opacity-80'} transition-opacity flex-shrink-0`}
           >
-            <img 
-              src="/assets/img/logo.png" 
-              alt="DHVLearnX Logo" 
-              className="h-8 w-8 rounded"
-            />
+            <BrandLogo href="" height={32} />
           </button>
           <div className={`h-5 w-px ${isDarkTheme ? 'bg-gray-600' : 'bg-gray-300'} flex-shrink-0`}></div>
           <div className={`font-[900] ${headerTextClass} truncate`} style={{ fontSize: '16px' }}>

@@ -1,4 +1,4 @@
--- DHV LearnX database migration
+-- NikaLearn database migration
 -- Run this in NEW Supabase → SQL Editor
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 

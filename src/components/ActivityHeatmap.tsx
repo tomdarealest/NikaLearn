@@ -17,11 +17,9 @@ interface DayCell {
 
 export default function ActivityHeatmap({ activities, totalCount, currentStreak }: ActivityHeatmapProps) {
   const [hoveredCell, setHoveredCell] = useState<{ date: Date; count: number; x: number; y: number } | null>(null);
-  const [scale, setScale] = useState(1);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Create a map for quick lookup of activity counts
+  // Create a map for quick lookup of activity counts by YYYY-MM-DD
   const activityMap = useMemo(() => {
     const map = new Map<string, number>();
     activities.forEach((activity) => {
@@ -30,12 +28,12 @@ export default function ActivityHeatmap({ activities, totalCount, currentStreak 
     return map;
   }, [activities]);
 
-  // Generate data for the heatmap (last 365 days)
+  // Generate data for the heatmap (last 365 days / 53 weeks)
   const heatmapData = useMemo(() => {
     const weeks: DayCell[][] = [];
     const today = new Date();
     
-    // Calculate the start date (365 days ago)
+    // Calculate the start date (364 days ago)
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - 364);
     
@@ -46,9 +44,12 @@ export default function ActivityHeatmap({ activities, totalCount, currentStreak 
     let currentWeek: DayCell[] = [];
     const currentDate = new Date(startDate);
     
-    // Generate 53 weeks worth of days
+    // 53 weeks * 7 days = 371 days
     for (let i = 0; i < 371; i++) {
-      const dateStr = currentDate.toISOString().split("T")[0];
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const dateStr = `${year}-${month}-${day}`;
       const count = activityMap.get(dateStr) || 0;
       
       currentWeek.push({
@@ -73,200 +74,182 @@ export default function ActivityHeatmap({ activities, totalCount, currentStreak 
     return weeks;
   }, [activityMap]);
 
-  // Get month labels
-  const monthLabels = useMemo(() => {
-    const labels: { month: string; offset: number }[] = [];
-    let lastMonth = -1;
-    
+  // Map weekIndex to Month label (anchored to the week containing the 1st of each month)
+  const monthLabelMap = useMemo(() => {
+    const map = new Map<number, string>();
+    if (heatmapData.length === 0) return map;
+
+    // Find the first week that contains day 1 of a month
+    let firstTransitionWeek = -1;
+    for (let w = 1; w < heatmapData.length; w++) {
+      if (heatmapData[w].some((d) => d.date.getDate() === 1)) {
+        firstTransitionWeek = w;
+        break;
+      }
+    }
+
+    // Only label week 0 if the next month transition is far enough (>= 3 weeks)
+    if (firstTransitionWeek >= 3) {
+      const firstMonthName = heatmapData[0][0].date.toLocaleDateString("vi-VN", { month: "short" });
+      map.set(0, firstMonthName.charAt(0).toUpperCase() + firstMonthName.slice(1));
+    }
+
+    let lastLabeledWeek = map.has(0) ? 0 : -999;
+
     heatmapData.forEach((week, weekIndex) => {
-      const firstDay = week[0];
-      if (firstDay && firstDay.month !== lastMonth) {
-        labels.push({
-          month: firstDay.date.toLocaleDateString("vi-VN", { month: "short" }),
-          offset: weekIndex,
-        });
-        lastMonth = firstDay.month;
+      if (weekIndex === 0) return;
+      const day1 = week.find((d) => d.date.getDate() === 1);
+      if (day1) {
+        if (weekIndex - lastLabeledWeek >= 3) {
+          const mName = day1.date.toLocaleDateString("vi-VN", { month: "short" });
+          map.set(weekIndex, mName.charAt(0).toUpperCase() + mName.slice(1));
+          lastLabeledWeek = weekIndex;
+        }
       }
     });
-    
-    return labels;
+
+    return map;
   }, [heatmapData]);
 
-  // Get color based on activity count (GitHub-style green gradient)
+  // Auto-scroll to current date on mobile
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+    }
+  }, []);
+
+  // Get color based on activity count (high-contrast olive/green palette)
   const getColor = (count: number) => {
-    if (count === 0) return "bg-gray-100";
-    if (count <= 2) return "bg-emerald-200";
-    if (count <= 5) return "bg-emerald-400";
-    if (count <= 9) return "bg-emerald-500";
-    return "bg-emerald-600";
+    if (count === 0) return "bg-[#EAE5D9] dark:bg-[#253323] border border-[#121212]/20 dark:border-[#2F422B]";
+    if (count <= 2) return "bg-[#A7D170] border border-[#121212]/30";
+    if (count <= 5) return "bg-[#7CB342] border border-[#121212]/30";
+    if (count <= 9) return "bg-[#6B8045] border border-[#121212]/30";
+    return "bg-[#46552B] border border-[#121212]/30";
   };
 
   const weekDayLabels = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
-
-  // Calculate scale to fit container width without scroll
-  useEffect(() => {
-    const updateScale = () => {
-      if (containerRef.current && gridRef.current) {
-        // Wait for next frame to ensure DOM is updated
-        requestAnimationFrame(() => {
-          if (containerRef.current && gridRef.current) {
-            const containerWidth = containerRef.current.offsetWidth;
-            // Day labels take about 30px, gap is 3px, padding from container
-            const availableWidth = containerWidth - 33 - 16; // 16px for padding
-            
-            // Calculate grid width: 53 weeks * (10px cell + 3px gap) = 53 * 13 = 689px
-            // But we need to account for actual rendered width
-            const gridWidth = gridRef.current.scrollWidth;
-            
-            if (gridWidth > availableWidth && availableWidth > 0) {
-              // Calculate scale to fit exactly
-              const calculatedScale = availableWidth / gridWidth;
-              setScale(Math.max(0.5, Math.min(1, calculatedScale))); // Min scale 0.5, max 1
-            } else {
-              setScale(1);
-            }
-          }
-        });
-      }
-    };
-
-    // Initial calculation
-    updateScale();
-    
-    // Recalculate on resize
-    const timeoutId = setTimeout(updateScale, 100);
-    window.addEventListener('resize', updateScale);
-    
-    return () => {
-      window.removeEventListener('resize', updateScale);
-      clearTimeout(timeoutId);
-    };
-  }, [heatmapData]);
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 w-full">
+    <div className="bg-white dark:bg-[#1B261A] rounded-2xl border-2 border-[#121212] dark:border-[#2F422B] p-5 sm:p-6 shadow-[4px_4px_0_#121212] dark:shadow-[4px_4px_0_#0D150C] w-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg sm:text-xl font-black text-[#121212] dark:text-white flex items-center gap-2 tracking-tight">
+          <span className="w-3 h-3 rounded-full bg-[#6B8045] inline-block"></span>
           {totalCount.toLocaleString("vi-VN")} hoạt động trong năm qua
         </h3>
         {currentStreak > 0 && (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span className="text-orange-500 font-semibold">🔥 {currentStreak} ngày liên tiếp</span>
+          <div className="px-3 py-1 bg-[#FFD23F] text-[#121212] border-2 border-[#121212] shadow-[2px_2px_0_#121212] rounded-full text-xs font-black flex items-center gap-1.5">
+            <span>🔥 {currentStreak} ngày streak liên tiếp</span>
           </div>
         )}
       </div>
 
-      {/* Heatmap Container - Full width, no scroll */}
-      <div ref={containerRef} className="w-full pb-2 overflow-hidden">
-        {/* Month Labels */}
-        <div 
-          className="flex gap-[3px] mb-2 ml-8"
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: 'left center',
-            height: scale < 1 ? `${14 / scale}px` : 'auto',
-          }}
+      {/* Heatmap Container - Spans full width on desktop, smoothly scrollable on narrow screens */}
+      <div
+        ref={scrollContainerRef}
+        className="w-full overflow-x-auto pb-3 pt-1 scrollbar-thin scrollbar-thumb-stone-300 dark:scrollbar-thumb-stone-700 select-none"
+      >
+        <div
+          className="w-full min-w-[720px] grid gap-[2px] sm:gap-[3px] md:gap-[4px]"
+          style={{ gridTemplateColumns: "auto repeat(53, minmax(0, 1fr))" }}
         >
-          {monthLabels.map((label, index) => (
-            <div
-              key={index}
-              className="text-xs text-gray-600 whitespace-nowrap"
-              style={{
-                marginLeft: index === 0 ? 0 : `${(label.offset - (monthLabels[index - 1]?.offset || 0)) * 11}px`,
-              }}
-            >
-              {label.month}
+          {/* Row 0: Month labels header */}
+          <div className="h-6" /> {/* Empty corner for day labels column */}
+          {heatmapData.map((_, weekIndex) => (
+            <div key={`month-${weekIndex}`} className="relative h-6">
+              {monthLabelMap.has(weekIndex) && (
+                <span
+                  className={`absolute bottom-1 text-[11px] sm:text-xs font-black text-stone-700 dark:text-stone-300 whitespace-nowrap pointer-events-none select-none ${
+                    weekIndex >= heatmapData.length - 3 ? "right-0 text-right" : "left-0"
+                  }`}
+                >
+                  {monthLabelMap.get(weekIndex)}
+                </span>
+              )}
+            </div>
+          ))}
+
+          {/* Rows 1 to 7: Day rows (CN -> T7) */}
+          {[0, 1, 2, 3, 4, 5, 6].map((dayIndex) => (
+            <div key={`row-${dayIndex}`} className="contents">
+              {/* Day label in Column 1 */}
+              <div
+                className="text-[10px] sm:text-[11px] font-black text-stone-600 dark:text-stone-400 flex items-center justify-end pr-1 sm:pr-2 select-none"
+                style={{ visibility: dayIndex % 2 === 1 ? "visible" : "hidden" }}
+              >
+                {weekDayLabels[dayIndex]}
+              </div>
+
+              {/* Day cells for each of the 53 weeks */}
+              {heatmapData.map((week, weekIndex) => {
+                const day = week[dayIndex];
+                if (!day) return <div key={`empty-${weekIndex}-${dayIndex}`} />;
+
+                const dayTime = new Date(day.date.getFullYear(), day.date.getMonth(), day.date.getDate()).getTime();
+                const isToday = dayTime === todayStart;
+                const isFutureDate = dayTime > todayStart;
+
+                return (
+                  <div
+                    key={`cell-${weekIndex}-${dayIndex}`}
+                    className={`
+                      w-full aspect-square rounded-[2px] sm:rounded-[3px] cursor-pointer transition-all
+                      ${isFutureDate ? "bg-transparent border border-dashed border-stone-200 dark:border-stone-800" : getColor(day.count)}
+                      ${isToday ? "ring-2 ring-[#FFD23F] ring-offset-1 ring-offset-white dark:ring-offset-[#1B261A]" : ""}
+                      hover:ring-2 hover:ring-[#121212] hover:ring-offset-1
+                    `}
+                    onMouseEnter={(e) => {
+                      if (!isFutureDate) {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        setHoveredCell({
+                          date: day.date,
+                          count: day.count,
+                          x: rect.left + rect.width / 2,
+                          y: rect.top,
+                        });
+                      }
+                    }}
+                    onMouseLeave={() => setHoveredCell(null)}
+                  />
+                );
+              })}
             </div>
           ))}
         </div>
-
-        {/* Heatmap Grid - Full width, scaled to fit */}
-        <div className="flex gap-[3px]">
-          {/* Day labels */}
-          <div className="flex flex-col gap-[3px] justify-start pr-2 flex-shrink-0">
-            {weekDayLabels.map((day, index) => (
-              <div
-                key={day}
-                className="text-xs text-gray-600 h-[10px] flex items-center"
-                style={{ visibility: index % 2 === 1 ? "visible" : "hidden" }}
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Activity cells - Scaled to fit container */}
-          <div 
-            ref={gridRef}
-            className="flex gap-[3px]"
-            style={{
-              transform: `scale(${scale})`,
-              transformOrigin: 'left top',
-              width: scale < 1 ? `${100 / scale}%` : '100%',
-            }}
-          >
-            {heatmapData.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-[3px]">
-                {week.map((day, dayIndex) => {
-                  const isToday = day.date.toDateString() === new Date().toDateString();
-                  const isFutureDate = day.date > new Date();
-                  
-                  return (
-                    <div
-                      key={dayIndex}
-                      className={`
-                        w-[10px] h-[10px] rounded-sm cursor-pointer transition-all flex-shrink-0
-                        ${isFutureDate ? "bg-transparent" : getColor(day.count)}
-                        ${isToday ? "ring-2 ring-blue-500 ring-offset-1" : ""}
-                        hover:ring-2 hover:ring-gray-400 hover:ring-offset-1
-                      `}
-                      onMouseEnter={(e) => {
-                        if (!isFutureDate) {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          setHoveredCell({
-                            date: day.date,
-                            count: day.count,
-                            x: rect.left + rect.width / 2,
-                            y: rect.top,
-                          });
-                        }
-                      }}
-                      onMouseLeave={() => setHoveredCell(null)}
-                    />
-                  );
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
 
-      {/* Legend */}
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200">
-        <div className="text-sm text-gray-600">Ít hơn</div>
-        <div className="flex items-center gap-1">
-          <div className="w-[10px] h-[10px] rounded-sm bg-gray-100"></div>
-          <div className="w-[10px] h-[10px] rounded-sm bg-emerald-200"></div>
-          <div className="w-[10px] h-[10px] rounded-sm bg-emerald-400"></div>
-          <div className="w-[10px] h-[10px] rounded-sm bg-emerald-500"></div>
-          <div className="w-[10px] h-[10px] rounded-sm bg-emerald-600"></div>
+      {/* Legend Footer */}
+      <div className="flex items-center justify-between mt-4 pt-3.5 border-t-2 border-stone-200 dark:border-stone-800/80 flex-wrap gap-2">
+        <span className="text-xs font-extrabold text-stone-500 dark:text-stone-400">
+          Tổng hợp đóng góp trong năm qua
+        </span>
+        <div className="flex items-center gap-2 ml-auto">
+          <span className="text-xs font-black uppercase tracking-wider text-stone-600 dark:text-stone-400">Ít hơn</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-[3px] bg-[#EAE5D9] dark:bg-[#253323] border border-[#121212]/20 dark:border-[#2F422B]" title="0 hoạt động" />
+            <div className="w-3 h-3 rounded-[3px] bg-[#A7D170] border border-[#121212]/30" title="1-2 hoạt động" />
+            <div className="w-3 h-3 rounded-[3px] bg-[#7CB342] border border-[#121212]/30" title="3-5 hoạt động" />
+            <div className="w-3 h-3 rounded-[3px] bg-[#6B8045] border border-[#121212]/30" title="6-9 hoạt động" />
+            <div className="w-3 h-3 rounded-[3px] bg-[#46552B] border border-[#121212]/30" title="10+ hoạt động" />
+          </div>
+          <span className="text-xs font-black uppercase tracking-wider text-stone-600 dark:text-stone-400">Nhiều hơn</span>
         </div>
-        <div className="text-sm text-gray-600">Nhiều hơn</div>
       </div>
 
       {/* Tooltip */}
       {hoveredCell && (
         <div
-          className="fixed z-50 bg-gray-900 text-white text-xs px-3 py-2 rounded-lg shadow-lg pointer-events-none"
+          className="fixed z-50 bg-[#121212] text-white text-xs px-3.5 py-2 rounded-xl border-2 border-[#FFD23F] shadow-[3px_3px_0_#FFD23F] pointer-events-none"
           style={{
             left: hoveredCell.x,
             top: hoveredCell.y - 10,
             transform: "translate(-50%, -100%)",
           }}
         >
-          <div className="font-semibold">{hoveredCell.count} hoạt động</div>
-          <div className="text-gray-300">
+          <div className="font-black text-sm text-[#FFD23F]">{hoveredCell.count} hoạt động</div>
+          <div className="text-stone-300 font-semibold">
             {hoveredCell.date.toLocaleDateString("vi-VN", {
               weekday: "long",
               year: "numeric",

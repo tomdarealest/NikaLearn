@@ -80,6 +80,7 @@ export default function AvatarWithProBadge({
               alt={fullName || "User"}
               width={128}
               height={128}
+              unoptimized
               className="w-full h-full object-cover"
             />
           ) : (

@@ -104,8 +104,8 @@ export async function insert<T>(
 
   // Convert boolean values properly for PostgreSQL
   const normalizedData = Array.isArray(data) 
-    ? data.map(item => normalizeData(item))
-    : normalizeData(data);
+    ? data.map(item => normalizeData(item, table))
+    : normalizeData(data, table);
 
   const { data: result, error } = await supabaseAdmin
     .from(table)
@@ -119,10 +119,8 @@ export async function insert<T>(
   return result as T[];
 }
 
-/**
- * Normalize data for PostgreSQL (convert boolean, handle dates, etc.)
- */
-function normalizeData(data: any): any {
+// Normalize data for PostgreSQL (convert boolean, handle dates, etc.)
+function normalizeData(data: any, table?: string): any {
   if (!data || typeof data !== 'object') {
     return data;
   }
@@ -142,6 +140,26 @@ function normalizeData(data: any): any {
       normalized[key] = value;
     }
   }
+
+  // Auto-generate UUID id and defaults for tables requiring explicit NOT NULL columns
+  const now = new Date().toISOString();
+  if (table === 'user_metadata') {
+    if (!normalized.id) normalized.id = crypto.randomUUID();
+    if (!normalized.created_at) normalized.created_at = now;
+    if (!normalized.updated_at) normalized.updated_at = now;
+  } else if (table === 'users') {
+    if (!normalized.id) normalized.id = crypto.randomUUID();
+    if (normalized.learning_streak === undefined || normalized.learning_streak === null) normalized.learning_streak = 0;
+    if (normalized.total_study_time === undefined || normalized.total_study_time === null) normalized.total_study_time = 0;
+    if (normalized.failed_login_attempts === undefined || normalized.failed_login_attempts === null) normalized.failed_login_attempts = 0;
+    if (normalized.is_active === undefined) normalized.is_active = true;
+    if (normalized.is_verified === undefined) normalized.is_verified = false;
+    if (normalized.role === undefined) normalized.role = 'STUDENT';
+    if (normalized.membership_type === undefined) normalized.membership_type = 'FREE';
+    if (!normalized.created_at) normalized.created_at = now;
+    if (!normalized.updated_at) normalized.updated_at = now;
+  }
+
   return normalized;
 }
 

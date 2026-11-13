@@ -1,23 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { rpc, queryOneBuilder } from '@/lib/db';
+import { queryOneBuilder, queryBuilder } from '@/lib/db-helpers';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ username: string }> }
 ) {
   try {
-    const { username } = await params;
+    const { username: rawUsername } = await params;
+    const username = decodeURIComponent(rawUsername).replace(/^@/, '').trim();
     const { searchParams } = new URL(request.url);
     const completedOnly = searchParams.get('completed') === 'true';
 
     // Get user ID from username
-    const user = await queryOneBuilder<{ id: string }>(
+    let user = await queryOneBuilder<{ id: string }>(
       'users',
       {
         select: 'id',
         filters: { username }
       }
     );
+
+    if (!user) {
+      user = await queryOneBuilder<{ id: string }>(
+        'users',
+        {
+          select: 'id',
+          filters: { id: username }
+        }
+      );
+    }
 
     if (!user) {
       return NextResponse.json(
@@ -31,26 +42,41 @@ export async function GET(
 
     const userId = user.id;
 
-    // Query enrolled courses using RPC function
-    const courses = await rpc<any[]>('get_user_enrolled_courses', { p_user_id: userId });
+    // Fetch user enrollments
+    const enrollments = await queryBuilder<any>('enrollments', {
+      filters: { user_id: userId, is_active: true },
+      orderBy: { column: 'enrolled_at', ascending: false },
+    });
+
+    const courseIds = (enrollments || []).map((e: any) => e.course_id).filter(Boolean);
+    const coursesMap = new Map<string, any>();
+
+    if (courseIds.length > 0) {
+      try {
+        const courses = await queryBuilder<any>('courses', {
+          filters: { id: courseIds },
+        });
+        (courses || []).forEach((c: any) => coursesMap.set(c.id, c));
+      } catch (cErr) {
+        console.warn('Error fetching course details for enrollments:', cErr);
+      }
+    }
 
     // Format response
-    let formattedCourses = (courses || []).map((course: any) => {
-      const progressPercentage = parseFloat(course.progress_percentage || 0);
-      // A course is considered completed if:
-      // 1. progress_percentage >= 100, OR
-      // 2. completed_at is not null
-      const isCompleted = progressPercentage >= 100 || Boolean(course.completed_at);
-      
+    let formattedCourses = (enrollments || []).map((enrollment: any) => {
+      const course = coursesMap.get(enrollment.course_id) || {};
+      const progressPercentage = parseFloat(enrollment.progress_percentage || 0);
+      const isCompleted = progressPercentage >= 100 || Boolean(enrollment.completed_at);
+
       return {
-        id: course.course_id,
-        title: course.course_title,
-        slug: course.course_slug,
-        thumbnail_url: course.course_thumbnail_url,
-        description: course.course_description || null,
+        id: enrollment.course_id,
+        title: course.title || 'Khoá học',
+        slug: course.slug || '',
+        thumbnail_url: course.thumbnail_url || null,
+        description: course.description || course.short_description || null,
         progress_percentage: progressPercentage,
-        enrolled_at: course.enrolled_at,
-        completed_at: course.completed_at,
+        enrolled_at: enrollment.enrolled_at,
+        completed_at: enrollment.completed_at,
         is_completed: isCompleted,
       };
     });

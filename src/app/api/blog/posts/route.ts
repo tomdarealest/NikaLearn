@@ -106,8 +106,7 @@ export async function GET(request: NextRequest) {
           published_at,
           created_at,
           updated_at,
-          user_id,
-          users!inner(id, username, full_name, avatar_url)
+          user_id
         `)
         .eq("status", status)
         .order("created_at", { ascending: false })
@@ -129,6 +128,20 @@ export async function GET(request: NextRequest) {
 
       if (postsError) {
         throw postsError
+      }
+
+      // Get users for posts
+      const userIds = [...new Set((posts || []).map((p: any) => p.user_id).filter(Boolean))]
+      const userMap = new Map<string, any>()
+      if (userIds.length > 0) {
+        const { data: usersData } = await supabaseAdmin!
+          .from("users")
+          .select("id, username, full_name, avatar_url")
+          .in("id", userIds)
+
+        if (usersData) {
+          usersData.forEach((u: any) => userMap.set(u.id, u))
+        }
       }
 
       // Get categories and tags for posts
@@ -170,23 +183,26 @@ export async function GET(request: NextRequest) {
       }
 
       // Format results similar to RPC function output
-      results = (posts || []).map((post: any) => ({
-        id: post.id,
-        title: post.title,
-        slug: post.slug,
-        excerpt: post.excerpt,
-        cover_image: post.cover_image,
-        username: post.users?.username || '',
-        full_name: post.users?.full_name || '',
-        avatar_url: post.users?.avatar_url || null,
-        published_at: post.published_at,
-        view_count: post.view_count || 0,
-        like_count: 0, // TODO: Get from blog_post_likes
-        comment_count: 0, // TODO: Get from blog_comments
-        bookmark_count: 0, // TODO: Get from blog_bookmarks
-        category_names: postCategoryMap.get(post.id)?.map((c: any) => c.name).join(", ") || null,
-        tag_names: null, // TODO: Get tags
-      }))
+      results = (posts || []).map((post: any) => {
+        const postAuthor = userMap.get(post.user_id)
+        return {
+          id: post.id,
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          cover_image: post.cover_image,
+          username: postAuthor?.username || '',
+          full_name: postAuthor?.full_name || '',
+          avatar_url: postAuthor?.avatar_url || null,
+          published_at: post.published_at,
+          view_count: post.view_count || 0,
+          like_count: 0, // TODO: Get from blog_post_likes
+          comment_count: 0, // TODO: Get from blog_comments
+          bookmark_count: 0, // TODO: Get from blog_bookmarks
+          category_names: postCategoryMap.get(post.id)?.map((c: any) => c.name).join(", ") || null,
+          tag_names: null, // TODO: Get tags
+        }
+      })
 
       // Get count
       let countQuery = supabaseAdmin!

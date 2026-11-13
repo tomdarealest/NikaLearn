@@ -21,6 +21,12 @@ export interface UserProfile {
   github?: string | null;
   twitter?: string | null;
   facebook?: string | null;
+
+  // Student academic and TOEIC target
+  university?: string | null;
+  major?: string | null;
+  target_score?: string | null;
+  target_deadline?: string | null;
   
   // Stats
   total_courses_enrolled: number;

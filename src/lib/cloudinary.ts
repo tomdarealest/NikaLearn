@@ -31,13 +31,13 @@ cloudinary.config({
 /**
  * Upload image to Cloudinary
  * @param fileBuffer - File buffer from FormData
- * @param folder - Cloudinary folder path (e.g., 'dhvlearnx/avatars')
+ * @param folder - Cloudinary folder path (e.g., 'nikalearn/avatars')
  * @param publicId - Optional custom public_id
  * @returns Upload result with URL
  */
 export async function uploadImage(
   fileBuffer: Buffer,
-  folder: string = 'dhvlearnx/uploads',
+  folder: string = 'nikalearn/uploads',
   publicId?: string
 ): Promise<{
   url: string;
@@ -86,7 +86,7 @@ export async function uploadImage(
 
 /**
  * Delete image from Cloudinary
- * @param publicId - Cloudinary public_id (e.g., 'dhvlearnx/avatars/abc123')
+ * @param publicId - Cloudinary public_id (e.g., 'nikalearn/avatars/abc123')
  */
 export async function deleteImage(publicId: string): Promise<void> {
   try {

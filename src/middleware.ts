@@ -16,6 +16,9 @@ export function middleware(request: NextRequest) {
     '/auth/register',
     '/courses',
     '/roadmap',
+    '/exams',
+    '/ai-tutor',
+    '/review',
     '/interview',
     '/articles',
     '/qa',
@@ -34,11 +37,12 @@ export function middleware(request: NextRequest) {
 
   // Danh sách các protected routes (cần xác thực)
   // ⚠️ NOTE: /api/courses routes sẽ tự handle auth tại route handler
-  // Middleware chỉ protect page routes (/learn, /admin) và API routes khác (/api/lessons, /api/users/me)
+  // Middleware chỉ protect page routes (/learn, /admin) và API routes khác (/api/lessons, /api/users/me, /api/admin)
   const protectedRoutes = [
     '/learn',
     '/admin',
     '/settings',
+    '/api/admin',
     '/api/lessons',
     '/api/chapters',
     '/api/users/me',
@@ -67,6 +71,47 @@ export function middleware(request: NextRequest) {
       
       // Nếu là page request, chuyển hướng đến login
       return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
+
+    // BẢO VỆ CHẶN TẤT CẢ TẤN CÔNG /admin & /api/admin: Kiểm tra quyền ADMIN / TEACHER
+    if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+      try {
+        // Parse payload từ JWT token (Base64url decode an toàn cho Edge Middleware)
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payloadJson = Buffer.from(parts[1], 'base64').toString('utf-8');
+          const payload = JSON.parse(payloadJson);
+          const role = (payload.role || '').toUpperCase();
+
+          if (role !== 'ADMIN' && role !== 'TEACHER') {
+            if (pathname.startsWith('/api')) {
+              return new NextResponse(
+                JSON.stringify({ success: false, message: 'Forbidden: Yêu cầu quyền quản trị viên' }),
+                { status: 403, headers: { 'content-type': 'application/json' } }
+              );
+            }
+            // Chặn người dùng thường cố tình gõ link /admin
+            return NextResponse.redirect(new URL('/403', request.url));
+          }
+        } else {
+          // Token giả mạo hoặc sai định dạng
+          if (pathname.startsWith('/api')) {
+            return new NextResponse(
+              JSON.stringify({ success: false, message: 'Invalid token' }),
+              { status: 401, headers: { 'content-type': 'application/json' } }
+            );
+          }
+          return NextResponse.redirect(new URL('/auth/login', request.url));
+        }
+      } catch (err) {
+        if (pathname.startsWith('/api')) {
+          return new NextResponse(
+            JSON.stringify({ success: false, message: 'Token verification failed' }),
+            { status: 401, headers: { 'content-type': 'application/json' } }
+          );
+        }
+        return NextResponse.redirect(new URL('/auth/login', request.url));
+      }
     }
   }
 

@@ -16,7 +16,7 @@ const Certificate: React.FC<CertificateProps> = ({
   completionDate,
   instructorName,
   courseDuration,
-  certificateId = `DHV-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+  certificateId = `NIKA-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
 }) => {
   return (
     <div className="certificate-container w-full max-w-[1000px] mx-auto bg-white p-8 md:p-12 text-center relative overflow-hidden shadow-2xl print:shadow-none print:w-[100%] print:max-w-none print:p-0">
@@ -41,7 +41,7 @@ const Certificate: React.FC<CertificateProps> = ({
             <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center shadow-lg">
               <Award className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-800 tracking-widest uppercase">DHVLearnX</span>
+            <span className="text-2xl font-bold text-gray-800 tracking-widest uppercase">NikaLearn</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 via-yellow-800 to-yellow-600">
             Certificate
